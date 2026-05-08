@@ -6,347 +6,154 @@
 <title>بسمة — أذكار الصباح والمساء</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
-
-<!-- Google Fonts — preconnect first for speed -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link id="gfonts" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@300;400;500;700&family=Lateef:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@300;400;500;700&family=Lateef:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-/* ══════════════════════════════════════
-   CSS VARIABLES — THEMES
-══════════════════════════════════════ */
 :root {
-  --bg:#f5f0e8; --card:#fffdf7; --accent:#6b8f71; --accent-light:#a8c5ae;
-  --accent-dark:#4a6b50; --text:#2d3a2e; --text-muted:#7a8c7b;
-  --border:#d8e8da; --gold:#b5955a; --shadow:rgba(107,143,113,.13);
-  --check-idle:#c8d8ca; --check-done:#6b8f71;
-  --zikr-font: 'Amiri', serif;
-  --ui-font: 'Tajawal', sans-serif;
+  --bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;
+  --accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;
+  --border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);
+  --check-idle:#c8d8ca;--check-done:#6b8f71;
+  --zikr-font:'Amiri',serif;--ui-font:'Tajawal',sans-serif;
 }
-body.theme-green { --bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;--accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;--border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);--check-idle:#c8d8ca;--check-done:#6b8f71 }
-body.theme-blue  { --bg:#eef2fa;--card:#f7f9fe;--accent:#5b7baa;--accent-light:#90afd4;--accent-dark:#3a5880;--text:#1e2d40;--text-muted:#6a82a0;--border:#c0d0e8;--gold:#7a6030;--shadow:rgba(91,123,170,.13);--check-idle:#b8cbdf;--check-done:#5b7baa }
-body.theme-sand  { --bg:#f2ece0;--card:#faf6ee;--accent:#a07850;--accent-light:#c8a87a;--accent-dark:#6e5030;--text:#3a2c18;--text-muted:#9a7a50;--border:#ddd0b8;--gold:#b07030;--shadow:rgba(160,120,80,.13);--check-idle:#d8c8a8;--check-done:#a07850 }
-body.theme-rose  { --bg:#f7f0f2;--card:#fdf8f9;--accent:#9a6070;--accent-light:#c490a0;--accent-dark:#703040;--text:#3a1820;--text-muted:#9a7080;--border:#e0c8d0;--gold:#a07848;--shadow:rgba(154,96,112,.13);--check-idle:#ddc0c8;--check-done:#9a6070 }
+body.theme-green{--bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;--accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;--border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);--check-idle:#c8d8ca;--check-done:#6b8f71}
+body.theme-blue {--bg:#eef2fa;--card:#f7f9fe;--accent:#5b7baa;--accent-light:#90afd4;--accent-dark:#3a5880;--text:#1e2d40;--text-muted:#6a82a0;--border:#c0d0e8;--gold:#7a6030;--shadow:rgba(91,123,170,.13);--check-idle:#b8cbdf;--check-done:#5b7baa}
+body.theme-sand {--bg:#f2ece0;--card:#faf6ee;--accent:#a07850;--accent-light:#c8a87a;--accent-dark:#6e5030;--text:#3a2c18;--text-muted:#9a7a50;--border:#ddd0b8;--gold:#b07030;--shadow:rgba(160,120,80,.13);--check-idle:#d8c8a8;--check-done:#a07850}
+body.theme-rose {--bg:#f7f0f2;--card:#fdf8f9;--accent:#9a6070;--accent-light:#c490a0;--accent-dark:#703040;--text:#3a1820;--text-muted:#9a7080;--border:#e0c8d0;--gold:#a07848;--shadow:rgba(154,96,112,.13);--check-idle:#ddc0c8;--check-done:#9a6070}
 
-/* ══════════════════════════════════════
-   FONT SIZE VARIANTS
-══════════════════════════════════════ */
-body.fs-sm .zikr-text { font-size: 17px !important; }
-body.fs-md .zikr-text { font-size: 21px !important; }
-body.fs-lg .zikr-text { font-size: 25px !important; }
-body.fs-xl .zikr-text { font-size: 30px !important; }
+body.fs-sm .zikr-text{font-size:17px!important}
+body.fs-md .zikr-text{font-size:21px!important}
+body.fs-lg .zikr-text{font-size:25px!important}
+body.fs-xl .zikr-text{font-size:30px!important}
 
-/* ══════════════════════════════════════
-   BASE
-══════════════════════════════════════ */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-height:100vh;direction:rtl;transition:background .5s,color .4s}
 
-body {
-  font-family: var(--ui-font);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  direction: rtl;
-  transition: background .5s, color .4s;
-}
+/* TOP BAR */
+.top-bar{background:var(--card);border-bottom:1px solid var(--border);padding:8px 14px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px var(--shadow)}
+.ctrl-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;max-width:640px;margin:0 auto}
+.ctrl-label{font-size:11px;color:var(--text-muted);font-family:var(--ui-font);white-space:nowrap;user-select:none}
+.sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+.theme-btns,.ctrl-btns{display:flex;gap:5px;align-items:center}
+.theme-btn{width:22px;height:22px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;transition:transform .2s,border-color .2s;flex-shrink:0}
+.theme-btn:hover{transform:scale(1.2)}
+.theme-btn.active{border-color:var(--text)}
+.theme-btn[data-t="green"]{background:linear-gradient(135deg,#a8c5ae,#6b8f71)}
+.theme-btn[data-t="blue"] {background:linear-gradient(135deg,#90afd4,#5b7baa)}
+.theme-btn[data-t="sand"] {background:linear-gradient(135deg,#c8a87a,#a07850)}
+.theme-btn[data-t="rose"] {background:linear-gradient(135deg,#c490a0,#9a6070)}
+.ctrl-btn{padding:3px 10px;border-radius:12px;border:1.5px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-size:12px;font-family:var(--ui-font);transition:all .2s;white-space:nowrap;line-height:1.6}
+.ctrl-btn:hover{background:var(--border)}
+.ctrl-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
-/* ══════════════════════════════════════
-   TOP CONTROLS BAR
-══════════════════════════════════════ */
-.top-bar {
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 14px;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  box-shadow: 0 2px 12px var(--shadow);
-}
-.ctrl-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 640px;
-  margin: 0 auto;
-}
-.ctrl-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-family: var(--ui-font);
-  white-space: nowrap;
-  user-select: none;
-}
-.sep { width:1px; height:22px; background:var(--border); flex-shrink:0; }
+/* HEADER */
+.header{text-align:center;padding:16px 16px 10px}
+.logo-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px}
+.logo-img{width:52px;height:52px;border-radius:14px;object-fit:cover;box-shadow:0 3px 12px var(--shadow)}
+.logo-text{font-family:var(--ui-font);font-size:22px;font-weight:700;color:var(--accent-dark);line-height:1.2}
+.logo-sub{font-size:12px;color:var(--text-muted);font-weight:400}
+.time-display{font-family:var(--ui-font);font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.divider{width:70px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:10px auto 0}
 
-/* Theme circles */
-.theme-btns, .ctrl-btns { display:flex; gap:5px; align-items:center; }
-.theme-btn {
-  width:22px; height:22px; border-radius:50%;
-  border:2.5px solid transparent; cursor:pointer;
-  transition: transform .2s, border-color .2s;
-  flex-shrink:0;
-}
-.theme-btn:hover { transform:scale(1.2); }
-.theme-btn.active { border-color: var(--text); }
-.theme-btn[data-t="green"] { background: linear-gradient(135deg,#a8c5ae,#6b8f71); }
-.theme-btn[data-t="blue"]  { background: linear-gradient(135deg,#90afd4,#5b7baa); }
-.theme-btn[data-t="sand"]  { background: linear-gradient(135deg,#c8a87a,#a07850); }
-.theme-btn[data-t="rose"]  { background: linear-gradient(135deg,#c490a0,#9a6070); }
+/* TABS */
+.cat-tabs{display:flex;max-width:580px;margin:12px auto 0;padding:0 14px}
+.cat-tab{flex:1;padding:9px 4px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:var(--ui-font);font-size:13px;font-weight:600;transition:all .2s;text-align:center;position:relative}
+.cat-tab:first-child{border-radius:12px 0 0 12px}
+.cat-tab:last-child{border-radius:0 12px 12px 0}
+.cat-tab:not(:last-child){border-left:none}
+.cat-tab:hover{background:var(--border);color:var(--text)}
+.cat-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);z-index:1}
+.auto-badge{display:inline-block;font-size:8px;background:var(--gold);color:#fff;border-radius:6px;padding:1px 4px;margin-right:3px;vertical-align:middle;font-weight:700}
 
-/* Small toggle buttons */
-.ctrl-btn {
-  padding: 3px 10px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  font-size: 12px;
-  font-family: var(--ui-font);
-  transition: all .2s;
-  white-space: nowrap;
-  line-height: 1.6;
-}
-.ctrl-btn:hover { background: var(--border); }
-.ctrl-btn.active { background: var(--accent); color:#fff; border-color: var(--accent); }
+/* PROGRESS */
+.progress-wrap{max-width:580px;margin:10px auto 0;padding:0 14px}
+.progress-label{font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:4px;font-family:var(--ui-font)}
+.progress-bar{height:5px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-light),var(--accent));border-radius:10px;transition:width .4s ease}
 
-/* ══════════════════════════════════════
-   HEADER
-══════════════════════════════════════ */
-.header {
-  text-align: center;
-  padding: 16px 16px 10px;
-}
-.logo-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-.logo-img {
-  width: 52px; height: 52px;
-  border-radius: 14px;
-  object-fit: cover;
-  box-shadow: 0 3px 12px var(--shadow);
-}
-.logo-text {
-  font-family: var(--ui-font);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--accent-dark);
-  line-height: 1.2;
-}
-.logo-sub {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 400;
-}
-.time-display {
-  font-family: var(--ui-font);
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-.divider {
-  width: 70px; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin: 10px auto 0;
-}
+/* CARDS */
+.container{max-width:580px;margin:0 auto;padding:12px 14px 30px}
+.azkar-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;display:flex;align-items:stretch;box-shadow:0 2px 10px var(--shadow);overflow:hidden;position:relative;animation:fadeIn .35s ease forwards;transition:opacity .35s,transform .35s,max-height .4s,margin .35s}
+.azkar-card::before{content:'';position:absolute;right:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--accent-light),var(--accent))}
+.azkar-card.done{opacity:0;transform:scale(.94) translateY(-6px);max-height:0!important;margin-bottom:0;padding:0;border:none;pointer-events:none}
 
-/* ══════════════════════════════════════
-   CATEGORY TABS
-══════════════════════════════════════ */
-.cat-tabs {
-  display: flex;
-  max-width: 580px;
-  margin: 12px auto 0;
-  padding: 0 14px;
-}
-.cat-tab {
-  flex: 1; padding: 9px 4px;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-family: var(--ui-font);
-  font-size: 13px;
-  font-weight: 600;
-  transition: all .2s;
-  text-align: center;
-  position: relative;
-}
-.cat-tab:first-child  { border-radius: 12px 0 0 12px; }
-.cat-tab:last-child   { border-radius: 0 12px 12px 0; }
-.cat-tab:not(:last-child) { border-left: none; }
-.cat-tab:hover { background: var(--border); color: var(--text); }
-.cat-tab.active { background: var(--accent); color:#fff; border-color: var(--accent); z-index:1; }
-.auto-badge {
-  display: inline-block;
-  font-size: 8px; background: var(--gold); color:#fff;
-  border-radius: 6px; padding: 1px 4px;
-  margin-right: 3px; vertical-align: middle; font-weight: 700;
-}
+/* check col */
+.check-col{display:flex;align-items:stretch;min-width:54px;max-width:54px;border-right:1px solid var(--border)}
+.check-btn{width:100%;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:background .2s;padding:10px 0}
+.check-btn:hover{background:rgba(0,0,0,.04)}
+.check-btn:active{background:rgba(0,0,0,.09)}
+.check-icon{width:36px;height:36px;border-radius:50%;border:2.5px solid var(--check-idle);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--check-idle);transition:all .25s;background:transparent}
+.check-btn:hover .check-icon{border-color:var(--check-done);color:var(--check-done);background:rgba(0,0,0,.05)}
+.check-icon.partial{border-color:var(--accent-light);color:var(--accent-light)}
+.check-icon.complete{background:var(--check-done);border-color:var(--check-done);color:#fff}
+.check-count{font-family:var(--ui-font);font-size:10px;color:var(--text-muted);line-height:1}
 
-/* ══════════════════════════════════════
-   PROGRESS
-══════════════════════════════════════ */
-.progress-wrap {
-  max-width: 580px; margin: 10px auto 0; padding: 0 14px;
-}
-.progress-label {
-  font-size: 11px; color: var(--text-muted);
-  text-align: center; margin-bottom: 4px;
-  font-family: var(--ui-font);
-}
-.progress-bar { height:5px; background:var(--border); border-radius:10px; overflow:hidden; }
-.progress-fill {
-  height:100%;
-  background: linear-gradient(90deg, var(--accent-light), var(--accent));
-  border-radius:10px; transition: width .4s ease;
-}
+/* card body */
+.card-body{flex:1;padding:16px 20px 12px 10px;text-align:right;direction:rtl}
+.zikr-text{font-family:var(--zikr-font)!important;font-size:21px;line-height:2.1;color:var(--text);margin-bottom:7px;text-align:right;direction:rtl}
+.zikr-source{font-size:11px;color:var(--text-muted);font-family:var(--ui-font);margin-bottom:8px;text-align:right;font-style:italic}
+.counter-wrap{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end;direction:rtl}
+.counter-dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--accent-light);background:transparent;cursor:pointer;transition:all .2s;font-size:12px;display:flex;align-items:center;justify-content:center;color:transparent}
+.dot.filled{background:var(--accent);border-color:var(--accent);color:#fff}
+.dot:hover{transform:scale(1.1)}
+.counter-text{font-size:11px;color:var(--text-muted);font-family:var(--ui-font)}
 
-/* ══════════════════════════════════════
-   CARDS
-══════════════════════════════════════ */
-.container {
-  max-width: 580px; margin: 0 auto;
-  padding: 12px 14px 100px;
-}
+/* step-10 boxes */
+.dots-10-wrap{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;align-items:center;margin-bottom:4px}
+.dot-10{width:34px;height:34px;border-radius:8px;border:2px solid var(--accent-light);background:transparent;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--ui-font);font-weight:700;color:var(--text-muted)}
+.dot-10.filled{background:var(--accent);border-color:var(--accent);color:#fff}
+.dot-10.next-up{border-color:var(--accent);color:var(--accent)}
+.dot-10:hover{transform:scale(1.08)}
+.dot-10-label{font-size:11px;color:var(--text-muted);font-family:var(--ui-font);width:100%;text-align:left;direction:ltr}
 
-.azkar-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: stretch;
-  box-shadow: 0 2px 10px var(--shadow);
-  overflow: hidden;
-  position: relative;
-  animation: fadeIn .35s ease forwards;
-  transition: opacity .35s, transform .35s, max-height .4s, margin .35s;
-}
-.azkar-card::before {
-  content:'';
-  position:absolute; right:0; top:0; bottom:0; width:4px;
-  background: linear-gradient(180deg, var(--accent-light), var(--accent));
-}
-.azkar-card.done {
-  opacity:0; transform: scale(.94) translateY(-6px);
-  max-height:0 !important; margin-bottom:0;
-  padding:0; border:none; pointer-events:none;
-}
+/* ALL DONE */
+.all-done{text-align:center;padding:50px 20px;display:none}
+.all-done.show{display:block}
+.all-done .icon{font-size:48px;margin-bottom:12px;animation:pulse 2s infinite}
+.all-done h2{font-family:var(--zikr-font);font-size:26px;color:var(--accent-dark);margin-bottom:8px}
+.all-done p{color:var(--text-muted);font-size:14px;line-height:1.9;font-family:var(--ui-font)}
+.reset-btn{margin-top:20px;padding:10px 28px;border-radius:28px;border:none;background:var(--accent);color:#fff;font-family:var(--ui-font);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px var(--shadow)}
+.reset-btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
 
-/* Check column — full height */
-.check-col {
-  display: flex; align-items: stretch;
-  min-width: 54px; max-width: 54px;
-  border-right: 1px solid var(--border);
-}
-.check-btn {
-  width:100%; border:none; background:transparent; cursor:pointer;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:5px; transition: background .2s; padding: 10px 0;
-}
-.check-btn:hover  { background: rgba(0,0,0,.04); }
-.check-btn:active { background: rgba(0,0,0,.09); }
+/* DUA WALL */
+.dua-wall{max-width:580px;margin:0 auto;padding:0 14px 80px}
+.dua-section-divider{height:1px;background:var(--border);margin-bottom:20px}
+.dua-wall-title{font-family:var(--zikr-font);font-size:21px;color:var(--accent-dark);text-align:center;margin-bottom:5px}
+.dua-wall-sub{font-size:12px;color:var(--text-muted);text-align:center;font-family:var(--ui-font);margin-bottom:16px;line-height:1.7}
+.dua-input-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.dua-textarea{width:100%;border:none;background:transparent;resize:none;font-family:var(--zikr-font);font-size:18px;line-height:1.9;color:var(--text);direction:rtl;text-align:right;outline:none;min-height:80px}
+.dua-textarea::placeholder{color:var(--text-muted);font-size:15px}
+.dua-send-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.dua-hint{font-size:11px;color:var(--text-muted);font-family:var(--ui-font)}
+.dua-send-btn{padding:7px 22px;border-radius:20px;border:none;background:var(--accent);color:#fff;font-family:var(--ui-font);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.dua-send-btn:hover{background:var(--accent-dark)}
+.dua-send-btn:disabled{opacity:.5;cursor:not-allowed}
+.dua-list{display:flex;flex-direction:column;gap:10px}
+.dua-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px 12px;box-shadow:0 1px 6px var(--shadow);position:relative;animation:fadeIn .3s ease forwards}
+.dua-card::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),var(--accent-light));border-radius:0 12px 12px 0}
+.dua-card-text{font-family:var(--zikr-font);font-size:18px;line-height:1.9;color:var(--text);text-align:right;direction:rtl;margin-bottom:6px}
+.dua-card-meta{font-size:11px;color:var(--text-muted);font-family:var(--ui-font);text-align:left;direction:ltr}
+.dua-empty{text-align:center;padding:30px 0;color:var(--text-muted);font-family:var(--ui-font);font-size:14px;line-height:2}
+.dua-loading{text-align:center;padding:20px;color:var(--text-muted);font-family:var(--ui-font);font-size:13px}
 
-.check-icon {
-  width:36px; height:36px; border-radius:50%;
-  border: 2.5px solid var(--check-idle);
-  display:flex; align-items:center; justify-content:center;
-  font-size:18px; color: var(--check-idle);
-  transition: all .25s; background: transparent;
-}
-.check-btn:hover .check-icon {
-  border-color: var(--check-done);
-  color: var(--check-done);
-  background: rgba(0,0,0,.05);
-}
-.check-icon.partial { border-color: var(--accent-light); color: var(--accent-light); }
-.check-icon.complete { background: var(--check-done); border-color: var(--check-done); color:#fff; }
-
-.check-count {
-  font-family: var(--ui-font);
-  font-size:10px; color:var(--text-muted); line-height:1;
-}
-
-/* Card body */
-.card-body {
-  flex:1; padding: 16px 20px 12px 10px;
-  text-align:right; direction:rtl;
-}
-
-.zikr-text {
-  font-family: var(--zikr-font) !important;
-  font-size: 21px;
-  line-height: 2.1;
-  color: var(--text);
-  margin-bottom: 7px;
-  text-align: right;
-  direction: rtl;
-}
-
-.zikr-source {
-  font-size: 11px; color: var(--text-muted);
-  font-family: var(--ui-font);
-  margin-bottom: 8px; text-align:right;
-  font-style: italic;
-}
-
-.counter-wrap {
-  display:flex; align-items:center; gap:5px;
-  flex-wrap:wrap; justify-content:flex-end; direction:rtl;
-}
-.counter-dots { display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end; }
-.dot {
-  width:24px; height:24px; border-radius:50%;
-  border:2px solid var(--accent-light); background:transparent;
-  cursor:pointer; transition:all .2s; font-size:12px;
-  display:flex; align-items:center; justify-content:center; color:transparent;
-}
-.dot.filled { background:var(--accent); border-color:var(--accent); color:#fff; }
-.dot:hover { transform:scale(1.1); }
-.counter-text { font-size:11px; color:var(--text-muted); font-family:var(--ui-font); }
-
-/* ══════════════════════════════════════
-   ALL DONE
-══════════════════════════════════════ */
-.all-done { text-align:center; padding:50px 20px; display:none; }
-.all-done.show { display:block; }
-.all-done .icon { font-size:48px; margin-bottom:12px; animation:pulse 2s infinite; }
-.all-done h2 { font-family:var(--zikr-font); font-size:26px; color:var(--accent-dark); margin-bottom:8px; }
-.all-done p  { color:var(--text-muted); font-size:14px; line-height:1.9; font-family:var(--ui-font); }
-.reset-btn {
-  margin-top:20px; padding:10px 28px; border-radius:28px;
-  border:none; background:var(--accent); color:#fff;
-  font-family:var(--ui-font); font-size:15px; font-weight:600;
-  cursor:pointer; transition:all .2s; box-shadow:0 4px 14px var(--shadow);
-}
-.reset-btn:hover { background:var(--accent-dark); transform:translateY(-1px); }
-
-/* ══════════════════════════════════════
-   ANIMATIONS
-══════════════════════════════════════ */
-@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-@keyframes pulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 </style>
 </head>
 <body class="theme-green fs-md">
 
-<!-- ══ TOP BAR ══ -->
+<!-- TOP BAR -->
 <div class="top-bar">
   <div class="ctrl-row">
     <span class="ctrl-label">🎨</span>
     <div class="theme-btns">
-      <button class="theme-btn active" data-t="green" onclick="setTheme('green',this)" title="أخضر"></button>
-      <button class="theme-btn" data-t="blue"  onclick="setTheme('blue',this)"  title="أزرق"></button>
-      <button class="theme-btn" data-t="sand"  onclick="setTheme('sand',this)"  title="بيج"></button>
-      <button class="theme-btn" data-t="rose"  onclick="setTheme('rose',this)"  title="وردي"></button>
+      <button class="theme-btn active" data-t="green" onclick="setTheme('green',this)"></button>
+      <button class="theme-btn" data-t="blue"  onclick="setTheme('blue',this)"></button>
+      <button class="theme-btn" data-t="sand"  onclick="setTheme('sand',this)"></button>
+      <button class="theme-btn" data-t="rose"  onclick="setTheme('rose',this)"></button>
     </div>
     <div class="sep"></div>
     <span class="ctrl-label">🔤 الخط:</span>
@@ -367,7 +174,7 @@ body {
   </div>
 </div>
 
-<!-- ══ HEADER ══ -->
+<!-- HEADER -->
 <div class="header">
   <div class="logo-wrap">
     <img src="favicon.png" alt="بسمة" class="logo-img">
@@ -380,20 +187,20 @@ body {
   <div class="divider"></div>
 </div>
 
-<!-- ══ TABS ══ -->
+<!-- TABS -->
 <div class="cat-tabs">
   <button class="cat-tab" id="tab-morning" onclick="switchTab('morning')">🌅 الصباح</button>
   <button class="cat-tab" id="tab-evening" onclick="switchTab('evening')">🌆 المساء</button>
   <button class="cat-tab" id="tab-other"   onclick="switchTab('other')">🌙 أدعية عامة</button>
 </div>
 
-<!-- ══ PROGRESS ══ -->
+<!-- PROGRESS -->
 <div class="progress-wrap">
   <div class="progress-label" id="progressLabel">0 / 0 مكتمل</div>
   <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 </div>
 
-<!-- ══ CARDS ══ -->
+<!-- CARDS -->
 <div class="container" id="azkarContainer"></div>
 
 <div class="all-done" id="allDone">
@@ -403,405 +210,295 @@ body {
   <button class="reset-btn" onclick="resetAll()">إعادة الأذكار</button>
 </div>
 
-<!-- ══════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════ -->
+<!-- DUA WALL -->
+<div class="dua-wall" id="duaWall" style="display:none">
+  <div class="dua-section-divider"></div>
+  <div class="dua-wall-title">🤲 جدار الأدعية المشتركة</div>
+  <div class="dua-wall-sub">اكتب دعاءك ليظهر للجميع لمدة ٢٤ ساعة<br>بدون اسم — فقط دعاء يصل</div>
+  <div class="dua-input-box">
+    <textarea class="dua-textarea" id="duaInput" placeholder="اللهم اغفر لي ولوالديّ..." maxlength="300" rows="3"></textarea>
+    <div class="dua-send-row">
+      <span class="dua-hint" id="duaCharCount">٠ / ٣٠٠</span>
+      <button class="dua-send-btn" id="duaSendBtn" onclick="sendDua()">أرسل الدعاء 🤲</button>
+    </div>
+  </div>
+  <div class="dua-list" id="duaList">
+    <div class="dua-loading">جاري التحميل...</div>
+  </div>
+</div>
+
 <script>
-/* ─────────────────────────────────────
-   AZKAR DATA
-───────────────────────────────────── */
+/* ════════════════ AZKAR DATA ════════════════ */
 const AZKAR = {
   morning: [
-    {
-      text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\n﴿ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴾",
-      source: "آية الكرسي — البقرة:255", count: 1
-    },
-    {
-      text: "﴿ قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴾",
-      source: "سورة الإخلاص", count: 3
-    },
-    {
-      text: "﴿ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴾",
-      source: "سورة الفلق", count: 3
-    },
-    {
-      text: "﴿ قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ ﴾",
-      source: "سورة الناس", count: 3
-    },
-    {
-      text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
-      source: "رواه مسلم", count: 1
-    },
-    {
-      text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ",
-      source: "رواه الترمذي وأبو داود", count: 1
-    },
-    {
-      text: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
-      source: "سيد الاستغفار — رواه البخاري", count: 1
-    },
-    {
-      text: "اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ",
-      source: "رواه أبو داود وابن حبان", count: 4
-    },
-    {
-      text: "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ، فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ",
-      source: "رواه أبو داود", count: 1
-    },
-    {
-      text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ",
-      source: "رواه أبو داود", count: 3
-    },
-    {
-      text: "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا وَرَسُولًا",
-      source: "رواه أبو داود والترمذي", count: 3
-    },
-    {
-      text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
-      source: "رواه البخاري ومسلم", count: 100
-    },
-    {
-      text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-      source: "رواه البخاري ومسلم", count: 10
-    },
-    {
-      text: "اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",
-      source: "الصلاة على النبي ﷺ", count: 10
-    }
+    {text:"أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\n﴿ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴾",source:"آية الكرسي — البقرة:255",count:1},
+    {text:"﴿ قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴾",source:"سورة الإخلاص",count:3},
+    {text:"﴿ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴾",source:"سورة الفلق",count:3},
+    {text:"﴿ قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ ﴾",source:"سورة الناس",count:3},
+    {text:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",source:"رواه مسلم",count:1},
+    {text:"اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ",source:"رواه الترمذي وأبو داود",count:1},
+    {text:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",source:"سيد الاستغفار — رواه البخاري",count:1},
+    {text:"اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ",source:"رواه أبو داود وابن حبان",count:4},
+    {text:"اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ، فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ",source:"رواه أبو داود",count:1},
+    {text:"اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ",source:"رواه أبو داود",count:3},
+    {text:"رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا وَرَسُولًا",source:"رواه أبو داود والترمذي",count:3},
+    {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",source:"رواه البخاري ومسلم",count:100,step:10},
+    {text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",source:"رواه البخاري ومسلم",count:10},
+    {text:"اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",source:"الصلاة على النبي ﷺ",count:10}
   ],
   evening: [
-    {
-      text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\n﴿ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴾",
-      source: "آية الكرسي — البقرة:255", count: 1
-    },
-    {
-      text: "﴿ قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴾",
-      source: "سورة الإخلاص", count: 3
-    },
-    {
-      text: "﴿ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴾",
-      source: "سورة الفلق", count: 3
-    },
-    {
-      text: "﴿ قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ ﴾",
-      source: "سورة الناس", count: 3
-    },
-    {
-      text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
-      source: "رواه مسلم", count: 1
-    },
-    {
-      text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ",
-      source: "رواه الترمذي وأبو داود", count: 1
-    },
-    {
-      text: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
-      source: "سيد الاستغفار — رواه البخاري", count: 1
-    },
-    {
-      text: "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ",
-      source: "رواه أبو داود وابن حبان", count: 4
-    },
-    {
-      text: "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ، فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ",
-      source: "رواه أبو داود", count: 1
-    },
-    {
-      text: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
-      source: "رواه أبو داود والترمذي", count: 3
-    },
-    {
-      text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ",
-      source: "رواه أبو داود", count: 3
-    },
-    {
-      text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
-      source: "رواه البخاري ومسلم", count: 100
-    },
-    {
-      text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-      source: "رواه البخاري ومسلم", count: 10
-    },
-    {
-      text: "اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",
-      source: "الصلاة على النبي ﷺ", count: 10
-    }
+    {text:"أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\n﴿ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴾",source:"آية الكرسي — البقرة:255",count:1},
+    {text:"﴿ قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴾",source:"سورة الإخلاص",count:3},
+    {text:"﴿ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴾",source:"سورة الفلق",count:3},
+    {text:"﴿ قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ ﴾",source:"سورة الناس",count:3},
+    {text:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",source:"رواه مسلم",count:1},
+    {text:"اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ",source:"رواه الترمذي وأبو داود",count:1},
+    {text:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",source:"سيد الاستغفار — رواه البخاري",count:1},
+    {text:"اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ",source:"رواه أبو داود وابن حبان",count:4},
+    {text:"اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ، فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ",source:"رواه أبو داود",count:1},
+    {text:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",source:"رواه أبو داود والترمذي",count:3},
+    {text:"اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ",source:"رواه أبو داود",count:3},
+    {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",source:"رواه البخاري ومسلم",count:100,step:10},
+    {text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",source:"رواه البخاري ومسلم",count:10},
+    {text:"اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",source:"الصلاة على النبي ﷺ",count:10}
   ],
   other: [
-    { text: "سُبْحَانَ اللَّهِ", source: "التسبيح", count: 33 },
-    { text: "الْحَمْدُ لِلَّهِ", source: "التحميد", count: 33 },
-    { text: "اللَّهُ أَكْبَرُ", source: "التكبير", count: 34 },
-    {
-      text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-      source: "رواه البخاري ومسلم", count: 10
-    },
-    {
-      text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
-      source: "أحب الكلام إلى الله — رواه البخاري", count: 10
-    },
-    {
-      text: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ",
-      source: "كنز من كنوز الجنة", count: 10
-    },
-    {
-      text: "أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
-      source: "الاستغفار", count: 100
-    },
-    {
-      text: "اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",
-      source: "الصلاة على النبي ﷺ", count: 10
-    },
-    {
-      text: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
-      source: "دعاء قرآني — البقرة:201", count: 3
-    },
-    {
-      text: "اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي",
-      source: "رواه مسلم", count: 7
-    },
-    {
-      text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ",
-      source: "رواه البخاري", count: 3
-    },
-    {
-      text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
-      source: "رواه أبو داود", count: 7
-    }
+    {text:"سُبْحَانَ اللَّهِ",source:"التسبيح",count:33},
+    {text:"الْحَمْدُ لِلَّهِ",source:"التحميد",count:33},
+    {text:"اللَّهُ أَكْبَرُ",source:"التكبير",count:34},
+    {text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",source:"رواه البخاري ومسلم",count:10},
+    {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",source:"أحب الكلام إلى الله — رواه البخاري",count:10},
+    {text:"لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ",source:"كنز من كنوز الجنة",count:10},
+    {text:"أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",source:"الاستغفار",count:100,step:10},
+    {text:"اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",source:"الصلاة على النبي ﷺ",count:10},
+    {text:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",source:"دعاء قرآني — البقرة:201",count:3},
+    {text:"اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي",source:"رواه مسلم",count:7},
+    {text:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ",source:"رواه البخاري",count:3},
+    {text:"حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",source:"رواه أبو داود",count:7}
   ]
 };
 
-/* ─────────────────────────────────────
-   STATE
-───────────────────────────────────── */
-let state    = {};
-let autoTab  = '';
-let activeTab = '';
+/* ════════════════ STATE ════════════════ */
+let state={}, autoTab='', activeTab='';
+function getAutoTab(h,m){const t=h*100+m;return t<=1200?'morning':t<=1700?'evening':'other'}
+function currentCat(){return activeTab||autoTab}
+function key(cat,i){return`${cat}_${i}`}
+function initState(cat){AZKAR[cat].forEach((_,i)=>{const k=key(cat,i);if(!(k in state))state[k]=0})}
 
-function getAutoTab(h, m) {
-  const t = h * 100 + m;
-  if (t <= 1200) return 'morning';
-  if (t <= 1700) return 'evening';
-  return 'other';
+/* ════════════════ TABS ════════════════ */
+function updateTabs(){
+  const cat=currentCat();
+  ['morning','evening','other'].forEach(t=>document.getElementById(`tab-${t}`).classList.toggle('active',t===cat));
+  document.querySelectorAll('.auto-badge').forEach(b=>b.remove());
+  const ae=document.getElementById(`tab-${autoTab}`);
+  if(ae){const b=document.createElement('span');b.className='auto-badge';b.textContent='تلقائي';ae.prepend(b)}
 }
 
-function currentCat() { return activeTab || autoTab; }
-function key(cat, i)  { return `${cat}_${i}`; }
-
-function initState(cat) {
-  AZKAR[cat].forEach((_, i) => {
-    const k = key(cat, i);
-    if (!(k in state)) state[k] = 0;
-  });
+function switchTab(cat){
+  activeTab=cat; initState(cat); updateTabs(); buildCards(cat);
+  const wall=document.getElementById('duaWall');
+  wall.style.display=cat==='other'?'block':'none';
+  if(cat==='other') loadDuas();
 }
 
-/* ─────────────────────────────────────
-   TABS
-───────────────────────────────────── */
-function updateTabs() {
-  const cat = currentCat();
-  ['morning','evening','other'].forEach(t => {
-    document.getElementById(`tab-${t}`).classList.toggle('active', t === cat);
-  });
-  document.querySelectorAll('.auto-badge').forEach(b => b.remove());
-  const autoEl = document.getElementById(`tab-${autoTab}`);
-  if (autoEl) {
-    const badge = document.createElement('span');
-    badge.className = 'auto-badge';
-    badge.textContent = 'تلقائي';
-    autoEl.prepend(badge);
-  }
-}
-
-function switchTab(cat) {
-  activeTab = cat;
-  initState(cat);
-  updateTabs();
-  buildCards(cat);
-}
-
-/* ─────────────────────────────────────
-   BUILD CARDS
-───────────────────────────────────── */
-function buildCards(cat) {
-  const azkar   = AZKAR[cat];
-  const box     = document.getElementById('azkarContainer');
-  const allDone = document.getElementById('allDone');
-  box.innerHTML = '';
-  allDone.classList.remove('show');
-
-  let total = azkar.length, done = 0;
-
-  azkar.forEach((z, i) => {
-    const prog = state[key(cat, i)] || 0;
-    if (prog >= z.count) { done++; return; }
-
-    const card = document.createElement('div');
-    card.className = 'azkar-card';
-    card.id = `card-${cat}-${i}`;
-    card.style.maxHeight = '700px';
-
-    // counter
-    let cntHTML = '';
-    if (z.count === 1) {
-      cntHTML = `<span class="counter-text">مرة واحدة</span>`;
-    } else if (z.count <= 10) {
-      let dots = '';
-      for (let d = 0; d < z.count; d++) {
-        dots += `<button class="dot ${d < prog ? 'filled' : ''}" onclick="tapDot('${cat}',${i},${d})">✓</button>`;
+/* ════════════════ BUILD CARDS ════════════════ */
+function buildCards(cat){
+  const azkar=AZKAR[cat];
+  const box=document.getElementById('azkarContainer');
+  document.getElementById('allDone').classList.remove('show');
+  box.innerHTML='';
+  let total=azkar.length, done=0;
+  azkar.forEach((z,i)=>{
+    const prog=state[key(cat,i)]||0;
+    if(prog>=z.count){done++;return}
+    const card=document.createElement('div');
+    card.className='azkar-card'; card.id=`card-${cat}-${i}`; card.style.maxHeight='700px';
+    let cntHTML='';
+    if(z.count===1){
+      cntHTML=`<span class="counter-text">مرة واحدة</span>`;
+    } else if(z.step===10){
+      const filled=Math.floor(prog/10);
+      let boxes='';
+      for(let b=0;b<10;b++){
+        const cls=b<filled?'filled':b===filled?'next-up':'';
+        boxes+=`<button class="dot-10 ${cls}" id="db-${cat}-${i}-${b}" onclick="tapBox('${cat}',${i},${b})">${(b+1)*10}</button>`;
       }
-      cntHTML = `<div class="counter-dots" id="dots-${cat}-${i}">${dots}</div>
-                 <span class="counter-text" id="ct-${cat}-${i}">${prog}/${z.count}</span>`;
+      cntHTML=`<div class="dots-10-wrap">${boxes}</div><div class="dot-10-label" id="ct-${cat}-${i}">${prog} / ${z.count} مرة</div>`;
+    } else if(z.count<=10){
+      let dots='';
+      for(let d=0;d<z.count;d++) dots+=`<button class="dot ${d<prog?'filled':''}" onclick="tapDot('${cat}',${i},${d})">✓</button>`;
+      cntHTML=`<div class="counter-dots" id="dots-${cat}-${i}">${dots}</div><span class="counter-text" id="ct-${cat}-${i}">${prog}/${z.count}</span>`;
     } else {
-      cntHTML = `<span class="counter-text" id="ct-${cat}-${i}">${prog}/${z.count} مرة</span>`;
+      cntHTML=`<span class="counter-text" id="ct-${cat}-${i}">${prog}/${z.count} مرة</span>`;
     }
-
-    const partial = prog > 0 ? 'partial' : '';
-
-    card.innerHTML = `
+    const partial=prog>0?'partial':'';
+    card.innerHTML=`
       <div class="check-col">
-        <button class="check-btn" onclick="tapCheck('${cat}',${i})" title="تم">
+        <button class="check-btn" onclick="tapCheck('${cat}',${i})">
           <div class="check-icon ${partial}" id="ci-${cat}-${i}">✓</div>
-          ${z.count > 1 ? `<span class="check-count" id="cc-${cat}-${i}">${prog}/${z.count}</span>` : ''}
+          ${z.count>1?`<span class="check-count" id="cc-${cat}-${i}">${prog}/${z.count}</span>`:''}
         </button>
       </div>
       <div class="card-body">
-        <div class="zikr-text">${z.text.replace(/\n/g, '<br>')}</div>
+        <div class="zikr-text">${z.text.replace(/\n/g,'<br>')}</div>
         <div class="zikr-source">${z.source}</div>
-        <div class="counter-wrap">${cntHTML}</div>
+        <div class="counter-wrap" id="cw-${cat}-${i}">${cntHTML}</div>
       </div>`;
-
     box.appendChild(card);
   });
-
-  updateProgress(done, total);
-  if (done === total) document.getElementById('allDone').classList.add('show');
+  updateProgress(done,total);
+  if(done===total) document.getElementById('allDone').classList.add('show');
 }
 
-function tapCheck(cat, i) {
-  const z = AZKAR[cat][i];
-  const k = key(cat, i);
-  state[k] = (state[k] || 0) + 1;
-  if (state[k] >= z.count) dismiss(cat, i);
-  else refreshCard(cat, i);
-}
-
-function tapDot(cat, i, d) {
-  const k = key(cat, i);
-  const prog = state[k] || 0;
-  if (d === prog) {
-    state[k] = prog + 1;
-    if (state[k] >= AZKAR[cat][i].count) dismiss(cat, i);
-    else refreshCard(cat, i);
+/* tapBox — each square = 10 taps */
+function tapBox(cat,i,boxIdx){
+  const z=AZKAR[cat][i]; const k=key(cat,i); const prog=state[k]||0;
+  const filled=Math.floor(prog/10);
+  if(boxIdx!==filled) return;           /* only tap the next square */
+  state[k]=Math.min(prog+10, z.count);
+  if(state[k]>=z.count){dismiss(cat,i);return}
+  const newFilled=Math.floor(state[k]/10);
+  for(let b=0;b<10;b++){
+    const el=document.getElementById(`db-${cat}-${i}-${b}`);
+    if(el){el.classList.remove('filled','next-up');el.classList.add(b<newFilled?'filled':b===newFilled?'next-up':'')}
   }
+  const ct=document.getElementById(`ct-${cat}-${i}`);
+  if(ct) ct.textContent=`${state[k]} / ${z.count} مرة`;
+  const ci=document.getElementById(`ci-${cat}-${i}`); if(ci) ci.classList.add('partial');
+  const cc=document.getElementById(`cc-${cat}-${i}`); if(cc) cc.textContent=`${state[k]}/${z.count}`;
 }
 
-function refreshCard(cat, i) {
-  const z    = AZKAR[cat][i];
-  const prog = state[key(cat, i)] || 0;
-
-  const ci = document.getElementById(`ci-${cat}-${i}`);
-  if (ci) ci.classList.toggle('partial', prog > 0);
-
-  const cc = document.getElementById(`cc-${cat}-${i}`);
-  if (cc) cc.textContent = `${prog}/${z.count}`;
-
-  const dotsEl = document.getElementById(`dots-${cat}-${i}`);
-  if (dotsEl) [...dotsEl.children].forEach((btn, d) => btn.classList.toggle('filled', d < prog));
-
-  const ct = document.getElementById(`ct-${cat}-${i}`);
-  if (ct) ct.textContent = z.count <= 10 ? `${prog}/${z.count}` : `${prog}/${z.count} مرة`;
+function tapCheck(cat,i){
+  const z=AZKAR[cat][i]; const k=key(cat,i);
+  if(z.step===10){tapBox(cat,i,Math.floor((state[k]||0)/10));return}
+  state[k]=(state[k]||0)+1;
+  if(state[k]>=z.count) dismiss(cat,i); else refreshCard(cat,i);
 }
 
-function dismiss(cat, i) {
-  const card = document.getElementById(`card-${cat}-${i}`);
-  if (!card) return;
-  const ci = document.getElementById(`ci-${cat}-${i}`);
-  if (ci) { ci.classList.add('complete'); }
-  setTimeout(() => {
-    card.classList.add('done');
-    setTimeout(() => { card.remove(); checkAllDone(cat); }, 380);
-  }, 300);
+function tapDot(cat,i,d){
+  const k=key(cat,i); const prog=state[k]||0;
+  if(d===prog){state[k]=prog+1;if(state[k]>=AZKAR[cat][i].count)dismiss(cat,i);else refreshCard(cat,i)}
 }
 
-function checkAllDone(cat) {
-  let total = AZKAR[cat].length, done = 0;
-  AZKAR[cat].forEach((_, i) => {
-    if ((state[key(cat, i)] || 0) >= AZKAR[cat][i].count) done++;
-  });
-  updateProgress(done, total);
-  if (done === total) document.getElementById('allDone').classList.add('show');
+function refreshCard(cat,i){
+  const z=AZKAR[cat][i]; const prog=state[key(cat,i)]||0;
+  const ci=document.getElementById(`ci-${cat}-${i}`); if(ci) ci.classList.toggle('partial',prog>0);
+  const cc=document.getElementById(`cc-${cat}-${i}`); if(cc) cc.textContent=`${prog}/${z.count}`;
+  const dotsEl=document.getElementById(`dots-${cat}-${i}`);
+  if(dotsEl)[...dotsEl.children].forEach((b,d)=>b.classList.toggle('filled',d<prog));
+  const ct=document.getElementById(`ct-${cat}-${i}`);
+  if(ct) ct.textContent=z.count<=10?`${prog}/${z.count}`:`${prog}/${z.count} مرة`;
 }
 
-function updateProgress(done, total) {
-  const pct = total > 0 ? (done / total) * 100 : 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `${done} / ${total} مكتمل`;
+function dismiss(cat,i){
+  const card=document.getElementById(`card-${cat}-${i}`); if(!card) return;
+  const ci=document.getElementById(`ci-${cat}-${i}`); if(ci) ci.classList.add('complete');
+  setTimeout(()=>{card.classList.add('done');setTimeout(()=>{card.remove();checkAllDone(cat)},380)},300);
 }
 
-function resetAll() {
-  const cat = currentCat();
-  AZKAR[cat].forEach((_, i) => state[key(cat, i)] = 0);
-  buildCards(cat);
+function checkAllDone(cat){
+  let total=AZKAR[cat].length,done=0;
+  AZKAR[cat].forEach((_,i)=>{if((state[key(cat,i)]||0)>=AZKAR[cat][i].count)done++});
+  updateProgress(done,total);
+  if(done===total) document.getElementById('allDone').classList.add('show');
 }
 
-/* ─────────────────────────────────────
-   THEME / FONT CONTROLS
-───────────────────────────────────── */
-function setTheme(t, btn) {
-  document.body.className = document.body.className.replace(/theme-\w+/, '') + ` theme-${t}`;
-  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function updateProgress(done,total){
+  document.getElementById('progressFill').style.width=(total>0?(done/total)*100:0)+'%';
+  document.getElementById('progressLabel').textContent=`${done} / ${total} مكتمل`;
 }
 
-function setFont(f, btn) {
-  /* Set CSS variable used by .zikr-text */
-  document.documentElement.style.setProperty('--zikr-font', `'${f}', serif`);
-  document.querySelectorAll('.ctrl-btn[data-f]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  /* Force repaint on all zikr-text elements */
-  document.querySelectorAll('.zikr-text').forEach(el => {
-    el.style.fontFamily = `'${f}', serif`;
-  });
+function resetAll(){const cat=currentCat();AZKAR[cat].forEach((_,i)=>state[key(cat,i)]=0);buildCards(cat)}
+
+/* ════════════════ THEME / FONT ════════════════ */
+function setTheme(t,btn){
+  document.body.className=document.body.className.replace(/theme-\w+/,'')+` theme-${t}`;
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+}
+function setFont(f,btn){
+  document.documentElement.style.setProperty('--zikr-font',`'${f}', serif`);
+  document.querySelectorAll('.ctrl-btn[data-f]').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.querySelectorAll('.zikr-text').forEach(el=>el.style.fontFamily=`'${f}', serif`);
+}
+function setSize(s,btn){
+  document.body.className=document.body.className.replace(/fs-\w+/,'')+` ${s}`;
+  document.querySelectorAll('.ctrl-btn[data-s]').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
 }
 
-function setSize(s, btn) {
-  document.body.className = document.body.className.replace(/fs-\w+/, '') + ` ${s}`;
-  document.querySelectorAll('.ctrl-btn[data-s]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+/* ════════════════ DUA WALL ════════════════ */
+const DUA_KEY='basma_duas_v1';
+
+async function loadDuas(){
+  const list=document.getElementById('duaList');
+  list.innerHTML='<div class="dua-loading">جاري التحميل...</div>';
+  try{
+    const raw=await window.storage.get(DUA_KEY,true);
+    renderDuas(raw?JSON.parse(raw.value):[]);
+  }catch(e){ renderDuas([]); }
 }
 
-/* ─────────────────────────────────────
-   TIME LOOP
-───────────────────────────────────── */
-function updateTime() {
-  const now  = new Date();
-  const h = now.getHours(), m = now.getMinutes();
-  const ap = h < 12 ? 'ص' : 'م';
-  document.getElementById('timeDisplay').textContent =
-    `الوقت: ${h % 12 || 12}:${String(m).padStart(2, '0')} ${ap}`;
-
-  const newAuto = getAutoTab(h, m);
-  if (newAuto !== autoTab) {
-    autoTab = newAuto;
-    if (!activeTab) {
-      initState(autoTab);
-      buildCards(autoTab);
-    }
-    updateTabs();
+function renderDuas(duas){
+  const list=document.getElementById('duaList');
+  const now=Date.now();
+  const fresh=duas.filter(d=>(now-d.ts)<86400000);
+  if(!fresh.length){
+    list.innerHTML='<div class="dua-empty">لا توجد أدعية بعد 🌿<br>كن أول من يكتب دعاء يصل للجميع</div>';
+    return;
   }
+  list.innerHTML='';
+  fresh.slice().reverse().forEach(d=>{
+    const card=document.createElement('div'); card.className='dua-card';
+    card.innerHTML=`<div class="dua-card-text">${escHtml(d.text)}</div>
+                    <div class="dua-card-meta">منذ ${timeSince(d.ts)}</div>`;
+    list.appendChild(card);
+  });
 }
 
-/* ─────────────────────────────────────
-   INIT
-───────────────────────────────────── */
-(function init() {
-  const now = new Date();
-  autoTab = getAutoTab(now.getHours(), now.getMinutes());
-  initState(autoTab);
-  updateTabs();
-  buildCards(autoTab);
-  updateTime();
-  setInterval(updateTime, 30000);
+async function sendDua(){
+  const inp=document.getElementById('duaInput');
+  const btn=document.getElementById('duaSendBtn');
+  const text=inp.value.trim(); if(!text) return;
+  btn.disabled=true; btn.textContent='جاري الإرسال...';
+  try{
+    let duas=[];
+    try{const raw=await window.storage.get(DUA_KEY,true);if(raw)duas=JSON.parse(raw.value)}catch(e){}
+    const now=Date.now();
+    duas=duas.filter(d=>(now-d.ts)<86400000);
+    duas.push({text,ts:now});
+    await window.storage.set(DUA_KEY,JSON.stringify(duas),true);
+    inp.value=''; updateCharCount(); renderDuas(duas);
+  }catch(e){ alert('حدث خطأ، يرجى المحاولة مجدداً'); }
+  btn.disabled=false; btn.textContent='أرسل الدعاء 🤲';
+}
+
+function updateCharCount(){
+  document.getElementById('duaCharCount').textContent=`${document.getElementById('duaInput').value.length} / ٣٠٠`;
+}
+document.getElementById('duaInput').addEventListener('input',updateCharCount);
+
+function timeSince(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60) return 'لحظات';
+  if(s<3600) return`${Math.floor(s/60)} دقيقة`;
+  return`${Math.floor(s/3600)} ساعة`;
+}
+function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+/* ════════════════ TIME ════════════════ */
+function updateTime(){
+  const now=new Date(); const h=now.getHours(),m=now.getMinutes();
+  document.getElementById('timeDisplay').textContent=`الوقت: ${h%12||12}:${String(m).padStart(2,'0')} ${h<12?'ص':'م'}`;
+  const na=getAutoTab(h,m);
+  if(na!==autoTab){autoTab=na;if(!activeTab){initState(autoTab);buildCards(autoTab)}updateTabs()}
+}
+
+/* ════════════════ INIT ════════════════ */
+(function(){
+  setFont('Tajawal',document.querySelector('.ctrl-btn[data-f="Tajawal"]'));
+  const now=new Date(); autoTab=getAutoTab(now.getHours(),now.getMinutes());
+  initState(autoTab); updateTabs(); buildCards(autoTab); updateTime();
+  setInterval(updateTime,30000);
+  if(currentCat()==='other'){document.getElementById('duaWall').style.display='block';loadDuas()}
 })();
 </script>
 </body>
