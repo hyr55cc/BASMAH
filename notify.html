@@ -252,35 +252,67 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 
 </div>
 
-<script>
+<script type="module">
 /* ════════════════ SETTINGS ════════════════ */
+const VAPID_KEY = 'BD-N55nnhlwva-XwFBY7bMEOQp9PHWG6UM1jUXSQzlw6yYWMM2frEvzSxH2_ArXWDYPyBqHckOKjZC1mKCyCtFY';
+
 const DEFAULTS = {
-  masterOn:   false,
-  morningOn:  true,  morningTime: '06:00',
-  eveningOn:  true,  eveningTime: '16:00',
-  prayerOn:   true,  prayerBefore: '10',
-  sound:      1,     volume: 80,
-  prayers: {Fajr:true, Sunrise:false, Dhuhr:true, Asr:true, Maghrib:true, Isha:true}
+  masterOn:false, morningOn:true, morningTime:'06:00',
+  eveningOn:true, eveningTime:'16:00',
+  prayerOn:true, prayerBefore:'10', sound:1, volume:80,
+  prayers:{Fajr:true,Sunrise:false,Dhuhr:true,Asr:true,Maghrib:true,Isha:true}
 };
-const PRAYERS_AR = {Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
+const PRAYERS_AR   = {Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
 const PRAYER_ICONS = {Fajr:'🌙',Sunrise:'🌅',Dhuhr:'☀️',Asr:'🌤️',Maghrib:'🌆',Isha:'🌙'};
 
 let cfg = {};
+let fbApp, fbMsg;
 
+/* ── Load/Save config ── */
 function loadCfg(){
   try{ cfg = JSON.parse(localStorage.getItem('basma_notify')||'{}'); }catch(e){ cfg={}; }
   cfg = Object.assign({}, DEFAULTS, cfg);
   if(!cfg.prayers) cfg.prayers = {...DEFAULTS.prayers};
 }
-
 function saveCfg(){ localStorage.setItem('basma_notify', JSON.stringify(cfg)); scheduleAll(); }
+function saveSetting(key, val){ cfg[key]=val; saveCfg(); }
 
-function saveSetting(key, val){
-  cfg[key] = val;
-  saveCfg();
+/* ── Firebase init ── */
+import { initializeApp }        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getMessaging, getToken, onMessage }
+                                from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js';
+
+fbApp = initializeApp({
+  apiKey:"AIzaSyBo-Uyp1ykA1HcPMm5LV5puvBGF5_-jJFU",
+  authDomain:"basmah-ad91f.firebaseapp.com",
+  projectId:"basmah-ad91f",
+  storageBucket:"basmah-ad91f.firebasestorage.app",
+  messagingSenderId:"841162019434",
+  appId:"1:841162019434:web:5fbbbef1b504a97a67b013"
+});
+fbMsg = getMessaging(fbApp);
+
+onMessage(fbMsg, payload => {
+  const {title,body} = payload.notification || {};
+  makeBeep(cfg.sound, cfg.volume);
+  new Notification(title||'بسمة',{body:body||'',icon:'favicon.png'});
+});
+
+/* ── Get FCM Token ── */
+async function getFCMToken(){
+  try{
+    const sw = await navigator.serviceWorker.ready;
+    const token = await getToken(fbMsg, {vapidKey: VAPID_KEY, serviceWorkerRegistration: sw});
+    if(token){
+      localStorage.setItem('basma_fcm_token', token);
+      console.log('FCM Token:', token);
+      return token;
+    }
+  }catch(e){ console.warn('FCM token error:', e); }
+  return null;
 }
 
-/* ════════════════ RENDER UI ════════════════ */
+/* ── RENDER UI ── */
 function renderUI(){
   document.getElementById('masterToggle').checked  = cfg.masterOn;
   document.getElementById('morningToggle').checked = cfg.morningOn;
@@ -291,13 +323,9 @@ function renderUI(){
   document.getElementById('prayerBefore').value    = cfg.prayerBefore;
   document.getElementById('volumeSlider').value    = cfg.volume;
   document.getElementById('volVal').textContent    = cfg.volume + '%';
-
-  // sound btns
   document.querySelectorAll('.sound-btn').forEach(b=>{
     b.classList.toggle('active', parseInt(b.dataset.s)===cfg.sound);
   });
-
-  // prayer rows
   const box = document.getElementById('prayerRows');
   box.innerHTML='';
   Object.entries(PRAYERS_AR).forEach(([k,name])=>{
@@ -321,83 +349,57 @@ function onMasterChange(){
   cfg.masterOn = document.getElementById('masterToggle').checked;
   if(cfg.masterOn && Notification.permission !== 'granted'){
     requestPermission();
-  }
-  saveCfg();
+  } else { saveCfg(); }
 }
+function onPrayerToggle(k,val){ cfg.prayers[k]=val; saveCfg(); }
+function onVolume(v){ cfg.volume=parseInt(v); document.getElementById('volVal').textContent=v+'%'; saveCfg(); previewSound(); }
 
-function onPrayerToggle(k, val){
-  cfg.prayers[k] = val;
-  saveCfg();
-}
-
-function onVolume(v){
-  cfg.volume = parseInt(v);
-  document.getElementById('volVal').textContent = v + '%';
-  saveCfg();
-  previewSound();
-}
-
-/* ════════════════ SOUND ════════════════ */
-function selectSound(s, btn){
-  cfg.sound = s;
+/* ── SOUND ── */
+function selectSound(s,btn){
+  cfg.sound=s;
   document.querySelectorAll('.sound-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  saveCfg();
-  previewSound();
+  saveCfg(); previewSound();
 }
 
-function makeBeep(type, vol){
+function makeBeep(type,vol){
   try{
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const g = ctx.createGain();
-    g.gain.value = vol / 100;
-    g.connect(ctx.destination);
-
-    if(type === 1){
-      // هادئة — 3 نبضات ناعمة
-      [0, 0.4, 0.8].forEach((t,i)=>{
-        const o=ctx.createOscillator();
-        o.type='sine'; o.frequency.value=528 + i*50;
-        const g2=ctx.createGain();
-        g2.gain.setValueAtTime(0,ctx.currentTime+t);
-        g2.gain.linearRampToValueAtTime(vol/100,ctx.currentTime+t+0.05);
-        g2.gain.linearRampToValueAtTime(0,ctx.currentTime+t+0.35);
-        o.connect(g2); g2.connect(ctx.destination);
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    if(type===1){
+      [0,0.4,0.8].forEach((t,i)=>{
+        const o=ctx.createOscillator(); o.type='sine'; o.frequency.value=528+i*50;
+        const g=ctx.createGain();
+        g.gain.setValueAtTime(0,ctx.currentTime+t);
+        g.gain.linearRampToValueAtTime(vol/100,ctx.currentTime+t+0.05);
+        g.gain.linearRampToValueAtTime(0,ctx.currentTime+t+0.35);
+        o.connect(g); g.connect(ctx.destination);
         o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.4);
       });
-    } else if(type === 2){
-      // طبيعة — موجة مع تلاشي
-      const o=ctx.createOscillator();
-      o.type='triangle'; o.frequency.setValueAtTime(440,ctx.currentTime);
+    } else if(type===2){
+      const o=ctx.createOscillator(); o.type='triangle';
+      o.frequency.setValueAtTime(440,ctx.currentTime);
       o.frequency.exponentialRampToValueAtTime(220,ctx.currentTime+0.8);
-      const gn=ctx.createGain();
-      gn.gain.setValueAtTime(vol/100,ctx.currentTime);
-      gn.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.9);
-      o.connect(gn); gn.connect(ctx.destination);
-      o.start(); o.stop(ctx.currentTime+1);
+      const g=ctx.createGain(); g.gain.setValueAtTime(vol/100,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.9);
+      o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+1);
     } else {
-      // بسيطة — نبضة واحدة نظيفة
-      const o=ctx.createOscillator();
-      o.type='sine'; o.frequency.value=660;
-      const gn=ctx.createGain();
-      gn.gain.setValueAtTime(vol/100,ctx.currentTime);
-      gn.gain.linearRampToValueAtTime(0,ctx.currentTime+0.3);
-      o.connect(gn); gn.connect(ctx.destination);
-      o.start(); o.stop(ctx.currentTime+0.35);
+      const o=ctx.createOscillator(); o.type='sine'; o.frequency.value=660;
+      const g=ctx.createGain(); g.gain.setValueAtTime(vol/100,ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0,ctx.currentTime+0.3);
+      o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+0.35);
     }
   }catch(e){}
 }
+function previewSound(){ makeBeep(cfg.sound,cfg.volume); }
 
-function previewSound(){ makeBeep(cfg.sound, cfg.volume); }
-
-/* ════════════════ PERMISSION ════════════════ */
+/* ── PERMISSION ── */
 function checkPermission(){
-  const banner = document.getElementById('permBanner');
-  if(Notification.permission === 'denied'){
+  const banner=document.getElementById('permBanner');
+  if(Notification.permission==='denied'){
     banner.classList.add('show');
-    banner.querySelector('.perm-text').innerHTML='⛔ تم رفض الإشعارات.<br>يرجى السماح من إعدادات المتصفح يدوياً.';
+    banner.querySelector('.perm-text').innerHTML='⛔ تم رفض الإشعارات.<br>السماح من إعدادات الجهاز ← Safari ← الإشعارات';
     banner.querySelector('.perm-btn').style.display='none';
-  } else if(Notification.permission !== 'granted'){
+  } else if(Notification.permission!=='granted'){
     banner.classList.add('show');
   } else {
     banner.classList.remove('show');
@@ -406,95 +408,80 @@ function checkPermission(){
 
 async function requestPermission(){
   const result = await Notification.requestPermission();
-  checkPermission();
-  if(result==='granted' && cfg.masterOn) scheduleAll();
+  if(result==='granted'){
+    checkPermission();
+    await getFCMToken();
+    if(cfg.masterOn) scheduleAll();
+  } else { checkPermission(); }
 }
 
-/* ════════════════ SCHEDULE ════════════════ */
-// We use setTimeout loops — works while page is open
-// For true background notifications, a Service Worker is needed
-
-let _timers = [];
-
+/* ── SCHEDULE (local setTimeout — works while app open) ── */
+let _timers=[];
 function clearTimers(){ _timers.forEach(t=>clearTimeout(t)); _timers=[]; }
 
 function scheduleAll(){
   clearTimers();
   if(!cfg.masterOn || Notification.permission!=='granted') return;
-
-  const now = new Date();
-
-  // Morning azkar
-  if(cfg.morningOn) scheduleDaily(cfg.morningTime, '🌅 أذكار الصباح', 'حان وقت أذكار الصباح — ابدأ يومك بذكر الله');
-
-  // Evening azkar
-  if(cfg.eveningOn) scheduleDaily(cfg.eveningTime, '🌆 أذكار المساء', 'حان وقت أذكار المساء — اختم نهارك بذكر الله');
-
-  // Prayer notifications
-  if(cfg.prayerOn) schedulePrayers();
+  if(cfg.morningOn) scheduleDaily(cfg.morningTime,'🌅 أذكار الصباح','حان وقت أذكار الصباح — ابدأ يومك بذكر الله','/BASMAH/');
+  if(cfg.eveningOn) scheduleDaily(cfg.eveningTime,'🌆 أذكار المساء','حان وقت أذكار المساء — اختم نهارك بذكر الله','/BASMAH/');
+  if(cfg.prayerOn)  schedulePrayers();
 }
 
-function scheduleDaily(timeStr, title, body){
-  const [h,m] = timeStr.split(':').map(Number);
-  const now = new Date();
-  const target = new Date();
-  target.setHours(h,m,0,0);
-  if(target <= now) target.setDate(target.getDate()+1);
-  const delay = target - now;
-  const t = setTimeout(()=>{
-    fireNotification(title, body);
-    makeBeep(cfg.sound, cfg.volume);
-    scheduleDaily(timeStr, title, body); // reschedule next day
-  }, delay);
+function scheduleDaily(timeStr,title,body,url){
+  const [h,m]=timeStr.split(':').map(Number);
+  const now=new Date();
+  const target=new Date(); target.setHours(h,m,0,0);
+  if(target<=now) target.setDate(target.getDate()+1);
+  const delay=target-now;
+  const t=setTimeout(()=>{
+    fireNotification(title,body,url);
+    makeBeep(cfg.sound,cfg.volume);
+    scheduleDaily(timeStr,title,body,url);
+  },delay);
   _timers.push(t);
 }
 
 async function schedulePrayers(){
   try{
-    const saved = localStorage.getItem('basma_city');
-    const city  = saved ? JSON.parse(saved) : {lat:21.3891,lng:39.8579};
-    const method= parseInt(localStorage.getItem('basma_method')||'4');
+    const saved=localStorage.getItem('basma_city');
+    const city=saved?JSON.parse(saved):{lat:21.3891,lng:39.8579};
+    const method=parseInt(localStorage.getItem('basma_method')||'4');
     const now=new Date();
     const dd=String(now.getDate()).padStart(2,'0');
     const mm=String(now.getMonth()+1).padStart(2,'0');
     const yyyy=now.getFullYear();
-    const url=`https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${city.lat}&longitude=${city.lng}&method=${method}`;
-    const res=await fetch(url);
+    const res=await fetch(`https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${city.lat}&longitude=${city.lng}&method=${method}`);
     const data=await res.json();
     if(data.code!==200) return;
     const timings=data.data.timings;
     const before=parseInt(cfg.prayerBefore||10)*60*1000;
-    const PRAYER_NAMES={Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
-    Object.entries(PRAYER_NAMES).forEach(([k,name])=>{
+    Object.entries(PRAYERS_AR).forEach(([k,name])=>{
       if(!cfg.prayers[k]) return;
       const [ph,pm]=timings[k].split(':').map(Number);
       const target=new Date(); target.setHours(ph,pm,0,0);
       const fireAt=new Date(target-before);
       if(fireAt>now){
-        const delay=fireAt-now;
         const t=setTimeout(()=>{
-          fireNotification(`🕌 ${name}`, `تبقّى ${cfg.prayerBefore} دقائق على صلاة ${name}`);
-          makeBeep(cfg.sound, cfg.volume);
-        }, delay);
+          fireNotification(`🕌 ${name}`,`تبقّى ${cfg.prayerBefore} دقائق على صلاة ${name}`,'/BASMAH/prayer.html');
+          makeBeep(cfg.sound,cfg.volume);
+        },fireAt-now);
         _timers.push(t);
       }
     });
   }catch(e){}
 }
 
-function fireNotification(title, body, url){
+/* ── FIRE NOTIFICATION ── */
+function fireNotification(title,body,url){
   if(Notification.permission!=='granted') return;
-  // Use SW for better background support
   if(navigator.serviceWorker?.controller){
-    navigator.serviceWorker.controller.postMessage({
-      type:'FIRE_NOTIFICATION', title, body, url: url||'/BASMAH/'
-    });
+    navigator.serviceWorker.controller.postMessage({type:'FIRE_NOTIFICATION',title,body,url:url||'/BASMAH/'});
   } else {
-    new Notification(title,{body, icon:'favicon.png', silent:true});
+    new Notification(title,{body,icon:'favicon.png',silent:true});
   }
 }
 
-/* ════════════════ TEST ════════════════ */
+/* ── TEST ── */
 function testNotification(){
   if(Notification.permission!=='granted'){
     requestPermission().then(()=>{ if(Notification.permission==='granted') doTest(); });
@@ -502,18 +489,25 @@ function testNotification(){
   }
   doTest();
 }
-
 function doTest(){
-  makeBeep(cfg.sound, cfg.volume);
-  setTimeout(()=>{
-    fireNotification('🔔 بسمة — اختبار الإشعار', 'الإشعارات تعمل بشكل صحيح ✅');
-  }, 500);
+  makeBeep(cfg.sound,cfg.volume);
+  setTimeout(()=>{ fireNotification('🔔 بسمة — اختبار','الإشعارات تعمل بشكل صحيح ✅','/BASMAH/'); },500);
 }
 
-/* ════════════════ INIT ════════════════ */
+/* ── INIT ── */
 loadCfg();
 renderUI();
 scheduleAll();
+if(cfg.masterOn && Notification.permission==='granted') getFCMToken();
+
+window.onMasterChange   = onMasterChange;
+window.saveSetting      = saveSetting;
+window.onPrayerToggle   = onPrayerToggle;
+window.selectSound      = selectSound;
+window.onVolume         = onVolume;
+window.requestPermission= requestPermission;
+window.testNotification = testNotification;
+
 </script>
 
 <script>

@@ -1,9 +1,23 @@
 /* ════════════════════════════════════════
-   بسمة — Service Worker
-   الإشعارات في الخلفية + التخزين المؤقت
+   بسمة — Service Worker + FCM
 ════════════════════════════════════════ */
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
-const CACHE_NAME = 'basmah-v1';
+/* ── Firebase init ── */
+firebase.initializeApp({
+  apiKey: "AIzaSyBo-Uyp1ykA1HcPMm5LV5puvBGF5_-jJFU",
+  authDomain: "basmah-ad91f.firebaseapp.com",
+  projectId: "basmah-ad91f",
+  storageBucket: "basmah-ad91f.firebasestorage.app",
+  messagingSenderId: "841162019434",
+  appId: "1:841162019434:web:5fbbbef1b504a97a67b013"
+});
+
+const messaging = firebase.messaging();
+
+/* ── Cache ── */
+const CACHE_NAME = 'basmah-v2';
 const ASSETS = [
   '/BASMAH/',
   '/BASMAH/index.html',
@@ -13,15 +27,11 @@ const ASSETS = [
   '/BASMAH/favicon.png'
 ];
 
-/* ── INSTALL: cache assets ── */
 self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
-  );
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
   self.skipWaiting();
 });
 
-/* ── ACTIVATE: clean old caches ── */
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -31,47 +41,49 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-/* ── FETCH: serve from cache, fallback to network ── */
 self.addEventListener('fetch', e => {
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );
 });
 
-/* ── NOTIFICATION CLICK ── */
+/* ── FCM Background Messages ── */
+messaging.onBackgroundMessage(payload => {
+  const { title, body, url } = payload.data || payload.notification || {};
+  return self.registration.showNotification(title || 'بسمة', {
+    body: body || '',
+    icon: '/BASMAH/favicon.png',
+    badge: '/BASMAH/favicon.png',
+    vibrate: [200, 100, 200],
+    data: { url: url || '/BASMAH/' },
+    requireInteraction: false
+  });
+});
+
+/* ── Notification Click ── */
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   const url = e.notification.data?.url || '/BASMAH/';
   e.waitUntil(
-    clients.matchAll({type:'window'}).then(list => {
-      for(const c of list){
-        if(c.url.includes('/BASMAH/') && 'focus' in c) return c.focus();
+    clients.matchAll({ type: 'window' }).then(list => {
+      for (const c of list) {
+        if (c.url.includes('/BASMAH/') && 'focus' in c) return c.focus();
       }
       return clients.openWindow(url);
     })
   );
 });
 
-/* ── BACKGROUND SYNC: check & fire scheduled notifications ── */
+/* ── Local scheduled notifications (from page message) ── */
 self.addEventListener('message', e => {
-  if(e.data?.type === 'SCHEDULE_NOTIFICATIONS'){
-    const cfg = e.data.cfg;
-    scheduleFromSW(cfg);
-  }
-});
-
-/* ── PERIODIC CHECK (via setInterval message from page) ── */
-self.addEventListener('message', e => {
-  if(e.data?.type === 'FIRE_NOTIFICATION'){
-    const {title, body, url} = e.data;
+  if (e.data?.type === 'FIRE_NOTIFICATION') {
+    const { title, body, url } = e.data;
     self.registration.showNotification(title, {
       body,
       icon: '/BASMAH/favicon.png',
       badge: '/BASMAH/favicon.png',
       vibrate: [200, 100, 200],
-      data: {url: url || '/BASMAH/'},
-      requireInteraction: false,
-      silent: false
+      data: { url: url || '/BASMAH/' }
     });
   }
 });
