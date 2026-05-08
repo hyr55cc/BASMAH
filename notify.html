@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بسمة — إعدادات الإشعارات</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;
+  --accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;
+  --border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);
+  --red:#c0392b;--red-light:#fadbd8;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;direction:rtl}
+
+/* NAV */
+.nav{background:var(--card);border-bottom:1px solid var(--border);padding:10px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px var(--shadow)}
+.nav-inner{max-width:580px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-img{width:36px;height:36px;border-radius:10px;object-fit:cover}
+.logo-text{font-size:18px;font-weight:700;color:var(--accent-dark)}
+.nav-links{display:flex;gap:6px}
+.nav-link{padding:5px 12px;border-radius:14px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.nav-link:hover{background:var(--border)}
+.nav-link.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* PAGE */
+.page{max-width:580px;margin:0 auto;padding:16px 14px 80px}
+
+/* SECTION */
+.section{margin-bottom:16px}
+.section-title{font-size:13px;color:var(--text-muted);margin-bottom:8px;padding-right:4px;font-weight:600;letter-spacing:.5px}
+
+/* CARD */
+.settings-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px var(--shadow)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);gap:12px}
+.settings-row:last-child{border-bottom:none}
+
+.row-left{display:flex;align-items:center;gap:12px;flex:1}
+.row-icon{font-size:22px;width:36px;text-align:center;flex-shrink:0}
+.row-info{flex:1}
+.row-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:2px}
+.row-sub{font-size:12px;color:var(--text-muted);line-height:1.5}
+
+/* TOGGLE */
+.toggle{position:relative;width:50px;height:28px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:28px;cursor:pointer;transition:all .3s}
+.toggle-slider::before{content:'';position:absolute;width:22px;height:22px;background:#fff;border-radius:50%;bottom:3px;right:3px;transition:all .3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle input:checked + .toggle-slider{background:var(--accent)}
+.toggle input:checked + .toggle-slider::before{transform:translateX(-22px)}
+
+/* TIME PICKER */
+.time-input{padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;width:100px;text-align:center}
+.time-input:focus{border-color:var(--accent)}
+
+/* SOUND SELECTOR */
+.sound-options{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--border)}
+.sound-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:12px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;flex:1;min-width:120px;justify-content:center}
+.sound-btn:hover{background:var(--border)}
+.sound-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sound-play{font-size:16px}
+
+/* VOLUME */
+.volume-row{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.volume-icon{font-size:18px;color:var(--text-muted)}
+.volume-slider{flex:1;-webkit-appearance:none;height:5px;border-radius:5px;background:var(--border);outline:none}
+.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 1px 4px var(--shadow)}
+.volume-val{font-size:13px;color:var(--text-muted);width:36px;text-align:center}
+
+/* PERMISSION BANNER */
+.perm-banner{background:var(--red-light);border:1px solid #f5b7b1;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:none}
+.perm-banner.show{display:flex;align-items:center;gap:12px}
+.perm-text{flex:1;font-size:13px;color:var(--red);line-height:1.6}
+.perm-btn{padding:7px 16px;border-radius:10px;border:none;background:var(--red);color:#fff;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* TEST BTN */
+.test-btn{width:100%;padding:12px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+.test-btn:hover{background:var(--accent-dark)}
+.test-btn:active{transform:scale(.98)}
+
+/* STATUS */
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
+.status-dot.on{background:#27ae60}
+.status-dot.off{background:#e74c3c}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.section{animation:fadeIn .3s ease forwards}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo-wrap">
+      <img src="favicon.png" alt="بسمة" class="logo-img">
+      <span class="logo-text">بسمة</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html"   class="nav-link">الأذكار</a>
+      <a href="prayer.html"  class="nav-link">الصلاة</a>
+      <a href="notify.html"  class="nav-link active">🔔 الإشعارات</a>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- PERMISSION BANNER -->
+  <div class="perm-banner" id="permBanner">
+    <div>⚠️</div>
+    <div class="perm-text">الإشعارات غير مفعّلة في المتصفح.<br>اضغط للسماح بالإشعارات.</div>
+    <button class="perm-btn" onclick="requestPermission()">السماح</button>
+  </div>
+
+  <!-- MASTER SWITCH -->
+  <div class="section">
+    <div class="section-title">التفعيل العام</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div class="row-left">
+          <div class="row-icon">🔔</div>
+          <div class="row-info">
+            <div class="row-title">تفعيل الإشعارات</div>
+            <div class="row-sub">تشغيل أو إيقاف جميع الإشعارات</div>
+          </div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="masterToggle" onchange="onMasterChange()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- AZKAR NOTIFICATIONS -->
+  <div class="section">
+    <div class="section-title">إشعارات الأذكار</div>
+    <div class="settings-card">
+
+      <!-- صباح -->
+      <div class="settings-row">
+        <div class="row-left">
+          <div class="row-icon">🌅</div>
+          <div class="row-info">
+            <div class="row-title">أذكار الصباح</div>
+            <div class="row-sub">تذكير يومي بأذكار الصباح</div>
+          </div>
+        </div>
+        <input type="time" class="time-input" id="morningTime" value="06:00" onchange="saveSetting('morningTime',this.value)">
+        <label class="toggle">
+          <input type="checkbox" id="morningToggle" onchange="saveSetting('morningOn',this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <!-- مساء -->
+      <div class="settings-row">
+        <div class="row-left">
+          <div class="row-icon">🌆</div>
+          <div class="row-info">
+            <div class="row-title">أذكار المساء</div>
+            <div class="row-sub">تذكير يومي بأذكار المساء</div>
+          </div>
+        </div>
+        <input type="time" class="time-input" id="eveningTime" value="16:00" onchange="saveSetting('eveningTime',this.value)">
+        <label class="toggle">
+          <input type="checkbox" id="eveningToggle" onchange="saveSetting('eveningOn',this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRAYER NOTIFICATIONS -->
+  <div class="section">
+    <div class="section-title">إشعارات الصلاة</div>
+    <div class="settings-card">
+
+      <div class="settings-row">
+        <div class="row-left">
+          <div class="row-icon">🕌</div>
+          <div class="row-info">
+            <div class="row-title">تنبيه الصلاة القادمة</div>
+            <div class="row-sub">إشعار قبل كل صلاة بـ</div>
+          </div>
+        </div>
+        <select id="prayerBefore" style="padding:6px 10px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;outline:none" onchange="saveSetting('prayerBefore',this.value)">
+          <option value="5">5 دقائق</option>
+          <option value="10" selected>10 دقائق</option>
+          <option value="15">15 دقيقة</option>
+          <option value="20">20 دقيقة</option>
+          <option value="30">30 دقيقة</option>
+        </select>
+        <label class="toggle">
+          <input type="checkbox" id="prayerToggle" onchange="saveSetting('prayerOn',this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <!-- Per-prayer -->
+      <div id="prayerDetails" style="border-top:1px solid var(--border)">
+        <div style="padding:10px 16px 4px;font-size:12px;color:var(--text-muted)">تحديد الصلوات:</div>
+        <div id="prayerRows"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SOUND -->
+  <div class="section">
+    <div class="section-title">نغمة التنبيه</div>
+    <div class="settings-card">
+      <div class="sound-options" id="soundOptions">
+        <button class="sound-btn active" data-s="1" onclick="selectSound(1,this)">
+          <span class="sound-play">🎵</span> نغمة هادئة
+        </button>
+        <button class="sound-btn" data-s="2" onclick="selectSound(2,this)">
+          <span class="sound-play">🎵</span> نغمة طبيعة
+        </button>
+        <button class="sound-btn" data-s="3" onclick="selectSound(3,this)">
+          <span class="sound-play">🎵</span> نغمة بسيطة
+        </button>
+      </div>
+      <div class="volume-row">
+        <span class="volume-icon">🔇</span>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80" oninput="onVolume(this.value)">
+        <span class="volume-icon">🔊</span>
+        <span class="volume-val" id="volVal">80%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEST -->
+  <button class="test-btn" onclick="testNotification()">
+    🔔 اختبار الإشعار الآن
+  </button>
+
+</div>
+
+<script>
+/* ════════════════ SETTINGS ════════════════ */
+const DEFAULTS = {
+  masterOn:   false,
+  morningOn:  true,  morningTime: '06:00',
+  eveningOn:  true,  eveningTime: '16:00',
+  prayerOn:   true,  prayerBefore: '10',
+  sound:      1,     volume: 80,
+  prayers: {Fajr:true, Sunrise:false, Dhuhr:true, Asr:true, Maghrib:true, Isha:true}
+};
+const PRAYERS_AR = {Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
+const PRAYER_ICONS = {Fajr:'🌙',Sunrise:'🌅',Dhuhr:'☀️',Asr:'🌤️',Maghrib:'🌆',Isha:'🌙'};
+
+let cfg = {};
+
+function loadCfg(){
+  try{ cfg = JSON.parse(localStorage.getItem('basma_notify')||'{}'); }catch(e){ cfg={}; }
+  cfg = Object.assign({}, DEFAULTS, cfg);
+  if(!cfg.prayers) cfg.prayers = {...DEFAULTS.prayers};
+}
+
+function saveCfg(){ localStorage.setItem('basma_notify', JSON.stringify(cfg)); scheduleAll(); }
+
+function saveSetting(key, val){
+  cfg[key] = val;
+  saveCfg();
+}
+
+/* ════════════════ RENDER UI ════════════════ */
+function renderUI(){
+  document.getElementById('masterToggle').checked  = cfg.masterOn;
+  document.getElementById('morningToggle').checked = cfg.morningOn;
+  document.getElementById('eveningToggle').checked = cfg.eveningOn;
+  document.getElementById('prayerToggle').checked  = cfg.prayerOn;
+  document.getElementById('morningTime').value     = cfg.morningTime;
+  document.getElementById('eveningTime').value     = cfg.eveningTime;
+  document.getElementById('prayerBefore').value    = cfg.prayerBefore;
+  document.getElementById('volumeSlider').value    = cfg.volume;
+  document.getElementById('volVal').textContent    = cfg.volume + '%';
+
+  // sound btns
+  document.querySelectorAll('.sound-btn').forEach(b=>{
+    b.classList.toggle('active', parseInt(b.dataset.s)===cfg.sound);
+  });
+
+  // prayer rows
+  const box = document.getElementById('prayerRows');
+  box.innerHTML='';
+  Object.entries(PRAYERS_AR).forEach(([k,name])=>{
+    const row=document.createElement('div');
+    row.className='settings-row';
+    row.innerHTML=`
+      <div class="row-left">
+        <div class="row-icon">${PRAYER_ICONS[k]}</div>
+        <div class="row-info"><div class="row-title">${name}</div></div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" ${cfg.prayers[k]?'checked':''} onchange="onPrayerToggle('${k}',this.checked)">
+        <span class="toggle-slider"></span>
+      </label>`;
+    box.appendChild(row);
+  });
+  checkPermission();
+}
+
+function onMasterChange(){
+  cfg.masterOn = document.getElementById('masterToggle').checked;
+  if(cfg.masterOn && Notification.permission !== 'granted'){
+    requestPermission();
+  }
+  saveCfg();
+}
+
+function onPrayerToggle(k, val){
+  cfg.prayers[k] = val;
+  saveCfg();
+}
+
+function onVolume(v){
+  cfg.volume = parseInt(v);
+  document.getElementById('volVal').textContent = v + '%';
+  saveCfg();
+  previewSound();
+}
+
+/* ════════════════ SOUND ════════════════ */
+function selectSound(s, btn){
+  cfg.sound = s;
+  document.querySelectorAll('.sound-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  saveCfg();
+  previewSound();
+}
+
+function makeBeep(type, vol){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const g = ctx.createGain();
+    g.gain.value = vol / 100;
+    g.connect(ctx.destination);
+
+    if(type === 1){
+      // هادئة — 3 نبضات ناعمة
+      [0, 0.4, 0.8].forEach((t,i)=>{
+        const o=ctx.createOscillator();
+        o.type='sine'; o.frequency.value=528 + i*50;
+        const g2=ctx.createGain();
+        g2.gain.setValueAtTime(0,ctx.currentTime+t);
+        g2.gain.linearRampToValueAtTime(vol/100,ctx.currentTime+t+0.05);
+        g2.gain.linearRampToValueAtTime(0,ctx.currentTime+t+0.35);
+        o.connect(g2); g2.connect(ctx.destination);
+        o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.4);
+      });
+    } else if(type === 2){
+      // طبيعة — موجة مع تلاشي
+      const o=ctx.createOscillator();
+      o.type='triangle'; o.frequency.setValueAtTime(440,ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(220,ctx.currentTime+0.8);
+      const gn=ctx.createGain();
+      gn.gain.setValueAtTime(vol/100,ctx.currentTime);
+      gn.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.9);
+      o.connect(gn); gn.connect(ctx.destination);
+      o.start(); o.stop(ctx.currentTime+1);
+    } else {
+      // بسيطة — نبضة واحدة نظيفة
+      const o=ctx.createOscillator();
+      o.type='sine'; o.frequency.value=660;
+      const gn=ctx.createGain();
+      gn.gain.setValueAtTime(vol/100,ctx.currentTime);
+      gn.gain.linearRampToValueAtTime(0,ctx.currentTime+0.3);
+      o.connect(gn); gn.connect(ctx.destination);
+      o.start(); o.stop(ctx.currentTime+0.35);
+    }
+  }catch(e){}
+}
+
+function previewSound(){ makeBeep(cfg.sound, cfg.volume); }
+
+/* ════════════════ PERMISSION ════════════════ */
+function checkPermission(){
+  const banner = document.getElementById('permBanner');
+  if(Notification.permission === 'denied'){
+    banner.classList.add('show');
+    banner.querySelector('.perm-text').innerHTML='⛔ تم رفض الإشعارات.<br>يرجى السماح من إعدادات المتصفح يدوياً.';
+    banner.querySelector('.perm-btn').style.display='none';
+  } else if(Notification.permission !== 'granted'){
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+async function requestPermission(){
+  const result = await Notification.requestPermission();
+  checkPermission();
+  if(result==='granted' && cfg.masterOn) scheduleAll();
+}
+
+/* ════════════════ SCHEDULE ════════════════ */
+// We use setTimeout loops — works while page is open
+// For true background notifications, a Service Worker is needed
+
+let _timers = [];
+
+function clearTimers(){ _timers.forEach(t=>clearTimeout(t)); _timers=[]; }
+
+function scheduleAll(){
+  clearTimers();
+  if(!cfg.masterOn || Notification.permission!=='granted') return;
+
+  const now = new Date();
+
+  // Morning azkar
+  if(cfg.morningOn) scheduleDaily(cfg.morningTime, '🌅 أذكار الصباح', 'حان وقت أذكار الصباح — ابدأ يومك بذكر الله');
+
+  // Evening azkar
+  if(cfg.eveningOn) scheduleDaily(cfg.eveningTime, '🌆 أذكار المساء', 'حان وقت أذكار المساء — اختم نهارك بذكر الله');
+
+  // Prayer notifications
+  if(cfg.prayerOn) schedulePrayers();
+}
+
+function scheduleDaily(timeStr, title, body){
+  const [h,m] = timeStr.split(':').map(Number);
+  const now = new Date();
+  const target = new Date();
+  target.setHours(h,m,0,0);
+  if(target <= now) target.setDate(target.getDate()+1);
+  const delay = target - now;
+  const t = setTimeout(()=>{
+    fireNotification(title, body);
+    makeBeep(cfg.sound, cfg.volume);
+    scheduleDaily(timeStr, title, body); // reschedule next day
+  }, delay);
+  _timers.push(t);
+}
+
+async function schedulePrayers(){
+  try{
+    const saved = localStorage.getItem('basma_city');
+    const city  = saved ? JSON.parse(saved) : {lat:21.3891,lng:39.8579};
+    const method= parseInt(localStorage.getItem('basma_method')||'4');
+    const now=new Date();
+    const dd=String(now.getDate()).padStart(2,'0');
+    const mm=String(now.getMonth()+1).padStart(2,'0');
+    const yyyy=now.getFullYear();
+    const url=`https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${city.lat}&longitude=${city.lng}&method=${method}`;
+    const res=await fetch(url);
+    const data=await res.json();
+    if(data.code!==200) return;
+    const timings=data.data.timings;
+    const before=parseInt(cfg.prayerBefore||10)*60*1000;
+    const PRAYER_NAMES={Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
+    Object.entries(PRAYER_NAMES).forEach(([k,name])=>{
+      if(!cfg.prayers[k]) return;
+      const [ph,pm]=timings[k].split(':').map(Number);
+      const target=new Date(); target.setHours(ph,pm,0,0);
+      const fireAt=new Date(target-before);
+      if(fireAt>now){
+        const delay=fireAt-now;
+        const t=setTimeout(()=>{
+          fireNotification(`🕌 ${name}`, `تبقّى ${cfg.prayerBefore} دقائق على صلاة ${name}`);
+          makeBeep(cfg.sound, cfg.volume);
+        }, delay);
+        _timers.push(t);
+      }
+    });
+  }catch(e){}
+}
+
+function fireNotification(title, body){
+  if(Notification.permission!=='granted') return;
+  new Notification(title,{
+    body,
+    icon:'favicon.png',
+    badge:'favicon.png',
+    silent:true // we play our own sound
+  });
+}
+
+/* ════════════════ TEST ════════════════ */
+function testNotification(){
+  if(Notification.permission!=='granted'){
+    requestPermission().then(()=>{ if(Notification.permission==='granted') doTest(); });
+    return;
+  }
+  doTest();
+}
+
+function doTest(){
+  makeBeep(cfg.sound, cfg.volume);
+  setTimeout(()=>{
+    fireNotification('🔔 بسمة — اختبار الإشعار', 'الإشعارات تعمل بشكل صحيح ✅');
+  }, 500);
+}
+
+/* ════════════════ INIT ════════════════ */
+loadCfg();
+renderUI();
+scheduleAll();
+</script>
+</body>
+</html>
