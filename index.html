@@ -227,7 +227,7 @@ body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-heigh
   </div>
 </div>
 
-<script>
+<script type="module">
 /* ════════════════ AZKAR DATA ════════════════ */
 const AZKAR = {
   morning: [
@@ -425,28 +425,42 @@ function setSize(s,btn){
   document.querySelectorAll('.ctrl-btn[data-s]').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
 }
 
-/* ════════════════ DUA WALL ════════════════ */
-const DUA_KEY='basma_duas_v1';
+/* ════════════════ DUA WALL — Firebase Firestore ════════════════ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBo-Uyp1ykA1HcPMm5LV5puvBGF5_-jJFU",
+  authDomain: "basmah-ad91f.firebaseapp.com",
+  projectId: "basmah-ad91f",
+  storageBucket: "basmah-ad91f.firebasestorage.app",
+  messagingSenderId: "841162019434",
+  appId: "1:841162019434:web:5fbbbef1b504a97a67b013"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db    = getFirestore(fbApp);
 
 async function loadDuas(){
   const list=document.getElementById('duaList');
   list.innerHTML='<div class="dua-loading">جاري التحميل...</div>';
   try{
-    const raw=await window.storage.get(DUA_KEY,true);
-    renderDuas(raw?JSON.parse(raw.value):[]);
-  }catch(e){ renderDuas([]); }
+    const since = Timestamp.fromMillis(Date.now()-86400000);
+    const q = query(collection(db,'duas'),where('ts','>',since),orderBy('ts','desc'));
+    const snap = await getDocs(q);
+    const duas = snap.docs.map(d=>({text:d.data().text, ts:d.data().ts.toMillis()}));
+    renderDuas(duas);
+  }catch(e){ console.error(e); renderDuas([]); }
 }
 
 function renderDuas(duas){
   const list=document.getElementById('duaList');
-  const now=Date.now();
-  const fresh=duas.filter(d=>(now-d.ts)<86400000);
-  if(!fresh.length){
+  if(!duas.length){
     list.innerHTML='<div class="dua-empty">لا توجد أدعية بعد 🌿<br>كن أول من يكتب دعاء يصل للجميع</div>';
     return;
   }
   list.innerHTML='';
-  fresh.slice().reverse().forEach(d=>{
+  duas.forEach(d=>{
     const card=document.createElement('div'); card.className='dua-card';
     card.innerHTML=`<div class="dua-card-text">${escHtml(d.text)}</div>
                     <div class="dua-card-meta">منذ ${timeSince(d.ts)}</div>`;
@@ -460,14 +474,9 @@ async function sendDua(){
   const text=inp.value.trim(); if(!text) return;
   btn.disabled=true; btn.textContent='جاري الإرسال...';
   try{
-    let duas=[];
-    try{const raw=await window.storage.get(DUA_KEY,true);if(raw)duas=JSON.parse(raw.value)}catch(e){}
-    const now=Date.now();
-    duas=duas.filter(d=>(now-d.ts)<86400000);
-    duas.push({text,ts:now});
-    await window.storage.set(DUA_KEY,JSON.stringify(duas),true);
-    inp.value=''; updateCharCount(); renderDuas(duas);
-  }catch(e){ alert('حدث خطأ، يرجى المحاولة مجدداً'); }
+    await addDoc(collection(db,'duas'),{ text, ts: Timestamp.now() });
+    inp.value=''; updateCharCount(); await loadDuas();
+  }catch(e){ console.error(e); alert('حدث خطأ، يرجى المحاولة مجدداً'); }
   btn.disabled=false; btn.textContent='أرسل الدعاء 🤲';
 }
 
@@ -500,6 +509,17 @@ function updateTime(){
   setInterval(updateTime,30000);
   if(currentCat()==='other'){document.getElementById('duaWall').style.display='block';loadDuas()}
 })();
+
+/* expose functions to global scope (required for type="module") */
+window.setTheme      = setTheme;
+window.setFont       = setFont;
+window.setSize       = setSize;
+window.switchTab     = switchTab;
+window.tapCheck      = tapCheck;
+window.tapDot        = tapDot;
+window.tapBox        = tapBox;
+window.resetAll      = resetAll;
+window.sendDua       = sendDua;
 </script>
 </body>
 </html>
