@@ -189,6 +189,9 @@ body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-heigh
     </a>
   </div>
   <div class="time-display" id="timeDisplay"></div>
+  <div id="nextPrayerBar" style="font-family:var(--ui-font);font-size:12px;color:var(--accent-dark);margin-bottom:2px;display:none">
+    <span id="npIcon">🕌</span> <strong id="npName"></strong> الساعة <strong id="npTime"></strong> — بعد <span id="npRemain"></span>
+  </div>
   <div class="divider"></div>
 </div>
 
@@ -499,9 +502,56 @@ function timeSince(ts){
 function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 /* ════════════════ TIME ════════════════ */
+const PRAYER_KEYS_MAIN = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+const PRAYER_AR_MAIN   = {Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
+const PRAYER_ICON_MAIN = {Fajr:'🌙',Sunrise:'🌅',Dhuhr:'☀️',Asr:'🌤️',Maghrib:'🌆',Isha:'🌙'};
+let _prayerTimings = null;
+
+async function fetchNextPrayer(){
+  try{
+    const saved = localStorage.getItem('basma_city');
+    const city  = saved ? JSON.parse(saved) : {lat:21.3891,lng:39.8579};
+    const method= parseInt(localStorage.getItem('basma_method')||'4');
+    const now=new Date();
+    const dd=String(now.getDate()).padStart(2,'0');
+    const mm=String(now.getMonth()+1).padStart(2,'0');
+    const yyyy=now.getFullYear();
+    const url=`https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${city.lat}&longitude=${city.lng}&method=${method}`;
+    const res=await fetch(url);
+    const data=await res.json();
+    if(data.code===200) _prayerTimings=data.data.timings;
+    showNextPrayer();
+  }catch(e){}
+}
+
+function showNextPrayer(){
+  if(!_prayerTimings) return;
+  const now=new Date();
+  const nowMins=now.getHours()*60+now.getMinutes();
+  const bar=document.getElementById('nextPrayerBar');
+  let nextKey=null;
+  for(const k of PRAYER_KEYS_MAIN){
+    const [h,m]=_prayerTimings[k].split(':').map(Number);
+    if(h*60+m > nowMins){nextKey=k;break;}
+  }
+  if(!nextKey) nextKey=PRAYER_KEYS_MAIN[0];
+  const [th,tm]=_prayerTimings[nextKey].split(':').map(Number);
+  let diff=(th*60+tm)-nowMins; if(diff<0) diff+=1440;
+  const hh=Math.floor(diff/60), mmm=diff%60;
+  const remain=hh>0?`${hh}س ${mmm}د`:`${mmm} دقيقة`;
+  const ap=th<12?'ص':'م'; const fh=th%12||12;
+  const timeStr=`${fh}:${String(tm).padStart(2,'0')} ${ap}`;
+  document.getElementById('npIcon').textContent=PRAYER_ICON_MAIN[nextKey];
+  document.getElementById('npName').textContent=PRAYER_AR_MAIN[nextKey];
+  document.getElementById('npTime').textContent=timeStr;
+  document.getElementById('npRemain').textContent=remain;
+  bar.style.display='block';
+}
+
 function updateTime(){
   const now=new Date(); const h=now.getHours(),m=now.getMinutes();
   document.getElementById('timeDisplay').textContent=`الوقت: ${h%12||12}:${String(m).padStart(2,'0')} ${h<12?'ص':'م'}`;
+  showNextPrayer();
   const na=getAutoTab(h,m);
   if(na!==autoTab){autoTab=na;if(!activeTab){initState(autoTab);buildCards(autoTab)}updateTabs()}
 }
@@ -511,7 +561,9 @@ function updateTime(){
   setFont('Tajawal',document.querySelector('.ctrl-btn[data-f="Tajawal"]'));
   const now=new Date(); autoTab=getAutoTab(now.getHours(),now.getMinutes());
   initState(autoTab); updateTabs(); buildCards(autoTab); updateTime();
+  fetchNextPrayer();
   setInterval(updateTime,30000);
+  setInterval(fetchNextPrayer, 300000);
   if(currentCat()==='other'){document.getElementById('duaWall').style.display='block';loadDuas()}
 })();
 
