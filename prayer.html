@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بسمة — مواقيت الصلاة</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;
+  --accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;
+  --border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;direction:rtl}
+
+/* NAV */
+.nav{background:var(--card);border-bottom:1px solid var(--border);padding:10px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px var(--shadow)}
+.nav-inner{max-width:580px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-img{width:36px;height:36px;border-radius:10px;object-fit:cover}
+.logo-text{font-size:18px;font-weight:700;color:var(--accent-dark)}
+.nav-links{display:flex;gap:8px}
+.nav-link{padding:5px 14px;border-radius:14px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.nav-link:hover{background:var(--border)}
+.nav-link.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* NEXT PRAYER BANNER */
+.next-banner{
+  background:linear-gradient(135deg,var(--accent-dark),var(--accent));
+  color:#fff;text-align:center;padding:18px 16px;margin:0;
+}
+.next-label{font-size:12px;opacity:.85;margin-bottom:4px;letter-spacing:1px}
+.next-name{font-family:'Amiri',serif;font-size:32px;font-weight:700;margin-bottom:4px}
+.next-time{font-size:22px;font-weight:300;margin-bottom:8px}
+.next-countdown{
+  display:inline-block;background:rgba(255,255,255,.2);
+  border-radius:20px;padding:4px 18px;font-size:14px;
+  letter-spacing:1px;
+}
+
+/* CITY SELECTOR */
+.city-section{max-width:580px;margin:16px auto;padding:0 14px}
+.city-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:0 2px 10px var(--shadow)}
+.city-label{font-size:13px;color:var(--text-muted);margin-bottom:8px}
+.city-row{display:flex;gap:8px;align-items:center}
+.city-select{
+  flex:1;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;
+  font-size:14px;outline:none;cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8c7b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:left 12px center;
+  padding-left:36px;
+}
+.city-select:focus{border-color:var(--accent)}
+.locate-btn{
+  padding:10px 16px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--bg);color:var(--accent);font-family:'Tajawal',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+  white-space:nowrap;
+}
+.locate-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* METHOD ROW */
+.method-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.method-label{font-size:12px;color:var(--text-muted);width:100%;margin-bottom:2px}
+.method-btn{padding:5px 12px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.method-btn:hover{background:var(--border)}
+.method-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* DATE ROW */
+.date-row{text-align:center;margin:10px auto;font-size:13px;color:var(--text-muted);max-width:580px;padding:0 14px}
+
+/* PRAYERS GRID */
+.prayers-section{max-width:580px;margin:0 auto;padding:0 14px 30px}
+.prayers-grid{display:flex;flex-direction:column;gap:10px}
+
+.prayer-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 8px var(--shadow);transition:all .3s;position:relative;overflow:hidden;
+}
+.prayer-card.current{
+  background:linear-gradient(135deg,var(--accent-dark),var(--accent));
+  border-color:transparent;
+}
+.prayer-card.current .prayer-name,
+.prayer-card.current .prayer-time,
+.prayer-card.current .prayer-icon{color:#fff}
+.prayer-card.current .prayer-remaining{color:rgba(255,255,255,.8)}
+.prayer-card.passed{opacity:.55}
+
+.prayer-card::before{content:'';position:absolute;right:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--accent-light),var(--accent));border-radius:0 14px 14px 0}
+.prayer-card.current::before{display:none}
+
+.prayer-left{display:flex;align-items:center;gap:12px}
+.prayer-icon{font-size:22px;width:36px;text-align:center;color:var(--accent)}
+.prayer-name{font-family:'Amiri',serif;font-size:22px;font-weight:700;color:var(--text)}
+.prayer-remaining{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+.prayer-time{font-size:20px;font-weight:700;color:var(--accent-dark);letter-spacing:.5px}
+
+/* HIJRI */
+.hijri-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;text-align:center;margin:0 14px 12px;max-width:552px;
+  margin-left:auto;margin-right:auto;
+  box-shadow:0 1px 6px var(--shadow);
+}
+.hijri-date{font-family:'Amiri',serif;font-size:18px;color:var(--accent-dark)}
+.hijri-label{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+/* LOADING */
+.loading-state{text-align:center;padding:50px 20px;color:var(--text-muted)}
+.loading-spinner{font-size:36px;animation:spin 1.5s linear infinite;display:block;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ERROR */
+.error-state{text-align:center;padding:40px 20px;color:var(--text-muted)}
+.error-icon{font-size:40px;margin-bottom:12px}
+.retry-btn{margin-top:16px;padding:10px 24px;border-radius:20px;border:none;background:var(--accent);color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;cursor:pointer}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.prayer-card{animation:fadeIn .3s ease forwards}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo-wrap">
+      <img src="favicon.png" alt="بسمة" class="logo-img">
+      <span class="logo-text">بسمة</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">الأذكار</a>
+      <a href="prayer.html" class="nav-link active">الصلاة</a>
+    </div>
+  </div>
+</div>
+
+<!-- NEXT PRAYER BANNER -->
+<div class="next-banner" id="nextBanner">
+  <div class="next-label">الصلاة القادمة</div>
+  <div class="next-name" id="nextName">--</div>
+  <div class="next-time" id="nextTime">--:--</div>
+  <div class="next-countdown" id="nextCountdown">جاري التحميل...</div>
+</div>
+
+<!-- CITY SELECTOR -->
+<div class="city-section">
+  <div class="city-card">
+    <div class="city-label">📍 اختر مدينتك</div>
+    <div class="city-row">
+      <select class="city-select" id="citySelect" onchange="onCityChange()">
+        <optgroup label="🇸🇦 المملكة العربية السعودية">
+          <option value="Mecca|21.3891|39.8579">مكة المكرمة</option>
+          <option value="Medina|24.5247|39.5692">المدينة المنورة</option>
+          <option value="Riyadh|24.7136|46.6753">الرياض</option>
+          <option value="Jeddah|21.4858|39.1925">جدة</option>
+          <option value="Dammam|26.4207|50.0888">الدمام</option>
+          <option value="Taif|21.2854|40.4158">الطائف</option>
+          <option value="Tabuk|28.3835|36.5662">تبوك</option>
+          <option value="Abha|18.2164|42.5053">أبها</option>
+          <option value="Hail|27.5114|41.7208">حائل</option>
+          <option value="Najran|17.4924|44.1277">نجران</option>
+          <option value="Khamis Mushait|18.3054|42.7296">خميس مشيط</option>
+          <option value="Buraidah|26.3260|43.9750">بريدة</option>
+        </optgroup>
+        <optgroup label="🇦🇪 الإمارات">
+          <option value="Dubai|25.2048|55.2708">دبي</option>
+          <option value="Abu Dhabi|24.4539|54.3773">أبوظبي</option>
+          <option value="Sharjah|25.3462|55.4209">الشارقة</option>
+        </optgroup>
+        <optgroup label="🇰🇼 الكويت">
+          <option value="Kuwait City|29.3759|47.9774">الكويت</option>
+        </optgroup>
+        <optgroup label="🇶🇦 قطر">
+          <option value="Doha|25.2854|51.5310">الدوحة</option>
+        </optgroup>
+        <optgroup label="🇧🇭 البحرين">
+          <option value="Manama|26.2154|50.5832">المنامة</option>
+        </optgroup>
+        <optgroup label="🇴🇲 عُمان">
+          <option value="Muscat|23.5880|58.3829">مسقط</option>
+        </optgroup>
+        <optgroup label="🇾🇪 اليمن">
+          <option value="Sanaa|15.3694|44.1910">صنعاء</option>
+          <option value="Aden|12.7797|45.0095">عدن</option>
+        </optgroup>
+        <optgroup label="🇯🇴 الأردن">
+          <option value="Amman|31.9539|35.9106">عمّان</option>
+        </optgroup>
+        <optgroup label="🇸🇾 سوريا">
+          <option value="Damascus|33.5138|36.2765">دمشق</option>
+        </optgroup>
+        <optgroup label="🇱🇧 لبنان">
+          <option value="Beirut|33.8938|35.5018">بيروت</option>
+        </optgroup>
+        <optgroup label="🇮🇶 العراق">
+          <option value="Baghdad|33.3152|44.3661">بغداد</option>
+        </optgroup>
+        <optgroup label="🇪🇬 مصر">
+          <option value="Cairo|30.0444|31.2357">القاهرة</option>
+          <option value="Alexandria|31.2001|29.9187">الإسكندرية</option>
+        </optgroup>
+        <optgroup label="🇲🇦 المغرب">
+          <option value="Casablanca|33.5731|-7.5898">الدار البيضاء</option>
+          <option value="Rabat|34.0209|-6.8416">الرباط</option>
+        </optgroup>
+        <optgroup label="🇩🇿 الجزائر">
+          <option value="Algiers|36.7372|3.0865">الجزائر</option>
+        </optgroup>
+        <optgroup label="🇹🇳 تونس">
+          <option value="Tunis|36.8065|10.1815">تونس</option>
+        </optgroup>
+        <optgroup label="🇱🇾 ليبيا">
+          <option value="Tripoli|32.9030|13.1807">طرابلس</option>
+        </optgroup>
+        <optgroup label="🇸🇩 السودان">
+          <option value="Khartoum|15.5007|32.5599">الخرطوم</option>
+        </optgroup>
+        <optgroup label="🇹🇷 تركيا">
+          <option value="Istanbul|41.0082|28.9784">إسطنبول</option>
+          <option value="Ankara|39.9334|32.8597">أنقرة</option>
+        </optgroup>
+        <optgroup label="🇬🇧 بريطانيا">
+          <option value="London|51.5074|-0.1278">لندن</option>
+        </optgroup>
+        <optgroup label="🇩🇪 ألمانيا">
+          <option value="Berlin|52.5200|13.4050">برلين</option>
+        </optgroup>
+        <optgroup label="🇫🇷 فرنسا">
+          <option value="Paris|48.8566|2.3522">باريس</option>
+        </optgroup>
+        <optgroup label="🇺🇸 أمريكا">
+          <option value="New York|40.7128|-74.0060">نيويورك</option>
+          <option value="Los Angeles|34.0522|-118.2437">لوس أنجلوس</option>
+          <option value="Chicago|41.8781|-87.6298">شيكاغو</option>
+        </optgroup>
+        <optgroup label="🇨🇦 كندا">
+          <option value="Toronto|43.6532|-79.3832">تورنتو</option>
+        </optgroup>
+        <optgroup label="🇦🇺 أستراليا">
+          <option value="Sydney|-33.8688|151.2093">سيدني</option>
+        </optgroup>
+        <optgroup label="🇮🇩 إندونيسيا">
+          <option value="Jakarta|-6.2088|106.8456">جاكرتا</option>
+        </optgroup>
+        <optgroup label="🇲🇾 ماليزيا">
+          <option value="Kuala Lumpur|3.1390|101.6869">كوالالمبور</option>
+        </optgroup>
+        <optgroup label="🇵🇰 باكستان">
+          <option value="Karachi|24.8607|67.0011">كراتشي</option>
+          <option value="Lahore|31.5204|74.3587">لاهور</option>
+        </optgroup>
+        <optgroup label="🇮🇳 الهند">
+          <option value="New Delhi|28.6139|77.2090">نيودلهي</option>
+          <option value="Mumbai|19.0760|72.8777">مومباي</option>
+        </optgroup>
+      </select>
+      <button class="locate-btn" onclick="autoLocate()" title="تحديد موقعي">📍 موقعي</button>
+    </div>
+    <div class="method-row">
+      <div class="method-label">طريقة الحساب:</div>
+      <button class="method-btn active" data-m="4" onclick="setMethod(4,this)">أم القرى</button>
+      <button class="method-btn" data-m="3" onclick="setMethod(3,this)">مسلم العالم</button>
+      <button class="method-btn" data-m="2" onclick="setMethod(2,this)">أمريكا الشمالية</button>
+      <button class="method-btn" data-m="1" onclick="setMethod(1,this)">الجامعة الإسلامية</button>
+    </div>
+  </div>
+</div>
+
+<!-- HIJRI DATE -->
+<div class="hijri-card" id="hijriCard" style="display:none">
+  <div class="hijri-date" id="hijriDate">--</div>
+  <div class="hijri-label">التاريخ الهجري</div>
+</div>
+
+<!-- DATE -->
+<div class="date-row" id="dateRow"></div>
+
+<!-- PRAYERS -->
+<div class="prayers-section">
+  <div class="prayers-grid" id="prayersGrid">
+    <div class="loading-state">
+      <span class="loading-spinner">🕌</span>
+      جاري تحميل المواقيت...
+    </div>
+  </div>
+</div>
+
+<script>
+const PRAYERS_AR = {
+  Fajr:    {name:'الفجر',   icon:'🌙'},
+  Sunrise: {name:'الشروق',  icon:'🌅'},
+  Dhuhr:   {name:'الظهر',   icon:'☀️'},
+  Asr:     {name:'العصر',   icon:'🌤️'},
+  Maghrib: {name:'المغرب',  icon:'🌆'},
+  Isha:    {name:'العشاء',  icon:'🌙'},
+};
+const PRAYER_KEYS = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+
+let currentCity = null;
+let currentMethod = 4;
+let timingsData = null;
+let countdownInterval = null;
+
+/* ── INIT ── */
+function init(){
+  const saved = localStorage.getItem('basma_city');
+  const savedMethod = localStorage.getItem('basma_method');
+  if(savedMethod){
+    currentMethod = parseInt(savedMethod);
+    document.querySelectorAll('.method-btn').forEach(b=>{
+      b.classList.toggle('active', parseInt(b.dataset.m)===currentMethod);
+    });
+  }
+  if(saved){
+    try{
+      currentCity = JSON.parse(saved);
+      // set select
+      const sel = document.getElementById('citySelect');
+      for(let i=0;i<sel.options.length;i++){
+        const [n] = sel.options[i].value.split('|');
+        if(n === currentCity.name){ sel.selectedIndex=i; break; }
+      }
+    }catch(e){ currentCity=null; }
+  }
+  if(!currentCity) onCityChange();
+  else fetchPrayers();
+  updateDateRow();
+}
+
+/* ── CITY CHANGE ── */
+function onCityChange(){
+  const sel = document.getElementById('citySelect');
+  const val = sel.value;
+  const [name, lat, lng] = val.split('|');
+  currentCity = {name, lat:parseFloat(lat), lng:parseFloat(lng)};
+  localStorage.setItem('basma_city', JSON.stringify(currentCity));
+  fetchPrayers();
+}
+
+/* ── AUTO LOCATE ── */
+function autoLocate(){
+  const btn = document.querySelector('.locate-btn');
+  btn.textContent = '⏳ جاري...';
+  btn.disabled = true;
+  if(!navigator.geolocation){
+    alert('المتصفح لا يدعم تحديد الموقع');
+    btn.textContent='📍 موقعي'; btn.disabled=false; return;
+  }
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat=pos.coords.latitude, lng=pos.coords.longitude;
+    // reverse geocode via nominatim
+    try{
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=ar`);
+      const data = await res.json();
+      const city = data.address.city || data.address.town || data.address.state || 'موقعي';
+      currentCity = {name:city, lat, lng};
+      localStorage.setItem('basma_city', JSON.stringify(currentCity));
+      fetchPrayers();
+    }catch(e){
+      currentCity = {name:'موقعي', lat, lng};
+      localStorage.setItem('basma_city', JSON.stringify(currentCity));
+      fetchPrayers();
+    }
+    btn.textContent='📍 موقعي'; btn.disabled=false;
+  }, err=>{
+    alert('تعذّر تحديد الموقع، يرجى اختيار المدينة يدوياً');
+    btn.textContent='📍 موقعي'; btn.disabled=false;
+  });
+}
+
+/* ── METHOD ── */
+function setMethod(m, btn){
+  currentMethod=m;
+  localStorage.setItem('basma_method', m);
+  document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  fetchPrayers();
+}
+
+/* ── FETCH PRAYERS ── */
+async function fetchPrayers(){
+  const grid = document.getElementById('prayersGrid');
+  grid.innerHTML='<div class="loading-state"><span class="loading-spinner">🕌</span>جاري تحميل المواقيت...</div>';
+  document.getElementById('nextName').textContent='--';
+  document.getElementById('nextTime').textContent='--:--';
+  document.getElementById('nextCountdown').textContent='جاري التحميل...';
+
+  const today = new Date();
+  const dd=String(today.getDate()).padStart(2,'0');
+  const mm=String(today.getMonth()+1).padStart(2,'0');
+  const yyyy=today.getFullYear();
+
+  const url=`https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${currentCity.lat}&longitude=${currentCity.lng}&method=${currentMethod}`;
+
+  try{
+    const res = await fetch(url);
+    const data = await res.json();
+    if(data.code===200){
+      timingsData = data.data.timings;
+      renderHijri(data.data.date.hijri);
+      renderPrayers(timingsData);
+      startCountdown(timingsData);
+    } else { showError(); }
+  }catch(e){ showError(); }
+}
+
+/* ── RENDER HIJRI ── */
+function renderHijri(hijri){
+  const months=['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+  const mIdx = parseInt(hijri.month.number)-1;
+  const mName = months[mIdx] || hijri.month.en;
+  document.getElementById('hijriDate').textContent=`${hijri.day} ${mName} ${hijri.year} هـ`;
+  document.getElementById('hijriCard').style.display='block';
+}
+
+/* ── RENDER PRAYERS ── */
+function renderPrayers(timings){
+  const grid = document.getElementById('prayersGrid');
+  grid.innerHTML='';
+  const now = new Date();
+  const nowMins = now.getHours()*60+now.getMinutes();
+
+  // find current & next
+  let currentIdx=-1, nextIdx=-1;
+  const prayerMins = PRAYER_KEYS.map(k=>{
+    const [h,m]=timings[k].split(':').map(Number);
+    return h*60+m;
+  });
+
+  for(let i=PRAYER_KEYS.length-1;i>=0;i--){
+    if(nowMins >= prayerMins[i]){ currentIdx=i; break; }
+  }
+  nextIdx = currentIdx+1 < PRAYER_KEYS.length ? currentIdx+1 : 0;
+
+  PRAYER_KEYS.forEach((k,i)=>{
+    const info = PRAYERS_AR[k];
+    const time = timings[k];
+    const isCurrent = i===currentIdx;
+    const isPassed  = currentIdx>=0 && i<currentIdx;
+
+    const remaining = i===nextIdx ? getRemaining(time) : '';
+
+    const card = document.createElement('div');
+    card.className = `prayer-card ${isCurrent?'current':''} ${isPassed?'passed':''}`;
+    card.id = `pc-${k}`;
+    card.innerHTML=`
+      <div class="prayer-left">
+        <span class="prayer-icon">${info.icon}</span>
+        <div>
+          <div class="prayer-name">${info.name}</div>
+          ${i===nextIdx ? `<div class="prayer-remaining" id="rem-${k}">بعد ${remaining}</div>` : ''}
+          ${isCurrent ? '<div class="prayer-remaining">الوقت الحالي</div>' : ''}
+        </div>
+      </div>
+      <div class="prayer-time">${formatTime(time)}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // update banner
+  if(nextIdx>=0){
+    const nk = PRAYER_KEYS[nextIdx];
+    document.getElementById('nextName').textContent = PRAYERS_AR[nk].name;
+    document.getElementById('nextTime').textContent  = formatTime(timingsData[nk]);
+  }
+}
+
+/* ── FORMAT TIME (12h arabic) ── */
+function formatTime(t){
+  let [h,m]=t.split(':').map(Number);
+  const ap = h<12?'ص':'م';
+  h = h%12||12;
+  return `${h}:${String(m).padStart(2,'0')} ${ap}`;
+}
+
+/* ── GET REMAINING ── */
+function getRemaining(timeStr){
+  const now=new Date();
+  const [th,tm]=timeStr.split(':').map(Number);
+  let diff = (th*60+tm) - (now.getHours()*60+now.getMinutes());
+  if(diff<0) diff+=1440;
+  const h=Math.floor(diff/60), m=diff%60;
+  if(h>0) return `${h} ساعة ${m>0?'و'+m+' دقيقة':''}`;
+  return `${m} دقيقة`;
+}
+
+/* ── COUNTDOWN ── */
+function startCountdown(timings){
+  if(countdownInterval) clearInterval(countdownInterval);
+  function tick(){
+    const now=new Date();
+    const nowMins=now.getHours()*60+now.getMinutes();
+    const prayerMins=PRAYER_KEYS.map(k=>{const[h,m]=timings[k].split(':').map(Number);return h*60+m});
+    let nextIdx=0;
+    for(let i=0;i<prayerMins.length;i++){if(prayerMins[i]>nowMins){nextIdx=i;break;}}
+    const nk=PRAYER_KEYS[nextIdx];
+    let diff=prayerMins[nextIdx]-nowMins;
+    if(diff<0) diff+=1440;
+    const hh=Math.floor(diff/60), mm=diff%60, ss=60-now.getSeconds();
+    const ssFmt=String(ss===60?0:ss).padStart(2,'0');
+    document.getElementById('nextCountdown').textContent=
+      `${hh>0?hh+'س ':''} ${String(mm).padStart(2,'0')}د ${ssFmt}ث`;
+    document.getElementById('nextName').textContent=PRAYERS_AR[nk].name;
+    document.getElementById('nextTime').textContent=formatTime(timings[nk]);
+    // update remaining on card
+    PRAYER_KEYS.forEach((k,i)=>{
+      const el=document.getElementById(`rem-${k}`);
+      if(el) el.textContent='بعد '+getRemaining(timings[k]);
+    });
+  }
+  tick();
+  countdownInterval=setInterval(tick,1000);
+}
+
+/* ── DATE ROW ── */
+function updateDateRow(){
+  const days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const now=new Date();
+  document.getElementById('dateRow').textContent=
+    `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+function showError(){
+  document.getElementById('prayersGrid').innerHTML=`
+    <div class="error-state">
+      <div class="error-icon">⚠️</div>
+      <div>تعذّر تحميل المواقيت<br>تحقق من الاتصال بالإنترنت</div>
+      <button class="retry-btn" onclick="fetchPrayers()">إعادة المحاولة</button>
+    </div>`;
+}
+
+init();
+</script>
+</body>
+</html>
