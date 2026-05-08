@@ -597,6 +597,105 @@ window.tapBox        = tapBox;
 window.resetAll      = resetAll;
 window.sendDua       = sendDua;
 </script>
+<script>
+/* ════════ BACKGROUND NOTIFICATION SCHEDULER ════════ */
+(function initNotifyScheduler(){
+  function scheduleNotifications(){
+    let cfg={};
+    try{ cfg=JSON.parse(localStorage.getItem('basma_notify')||'{}'); }catch(e){}
+    if(!cfg.masterOn || Notification.permission!=='granted') return;
+
+    const timers = window._basmaNfTimers || [];
+    timers.forEach(t=>clearTimeout(t));
+    window._basmaNfTimers = [];
+
+    function beep(){
+      try{
+        const ctx=new(window.AudioContext||window.webkitAudioContext)();
+        const vol=(cfg.volume||80)/100;
+        const type=cfg.sound||1;
+        if(type===1){
+          [0,0.4,0.8].forEach((t,i)=>{
+            const o=ctx.createOscillator();o.type='sine';o.frequency.value=528+i*50;
+            const g=ctx.createGain();
+            g.gain.setValueAtTime(0,ctx.currentTime+t);
+            g.gain.linearRampToValueAtTime(vol,ctx.currentTime+t+0.05);
+            g.gain.linearRampToValueAtTime(0,ctx.currentTime+t+0.35);
+            o.connect(g);g.connect(ctx.destination);
+            o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.4);
+          });
+        } else {
+          const o=ctx.createOscillator();o.type='sine';o.frequency.value=660;
+          const g=ctx.createGain();g.gain.setValueAtTime(vol,ctx.currentTime);
+          g.gain.linearRampToValueAtTime(0,ctx.currentTime+0.3);
+          o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.35);
+        }
+      }catch(e){}
+    }
+
+    function fire(title,body,url){
+      if(navigator.serviceWorker?.controller){
+        navigator.serviceWorker.controller.postMessage({type:'FIRE_NOTIFICATION',title,body,url});
+      } else {
+        new Notification(title,{body,icon:'favicon.png'});
+      }
+      beep();
+    }
+
+    function schedDaily(timeStr,title,body,url){
+      const [h,m]=timeStr.split(':').map(Number);
+      const now=new Date();
+      const target=new Date();target.setHours(h,m,0,0);
+      if(target<=now) target.setDate(target.getDate()+1);
+      const delay=target-now;
+      console.log('⏰ Scheduled:', title, 'in', Math.round(delay/60000), 'mins');
+      const t=setTimeout(()=>{ fire(title,body,url); schedDaily(timeStr,title,body,url); },delay);
+      window._basmaNfTimers.push(t);
+    }
+
+    if(cfg.morningOn) schedDaily(cfg.morningTime||'06:00','🌅 أذكار الصباح','حان وقت أذكار الصباح — ابدأ يومك بذكر الله','/BASMAH/');
+    if(cfg.eveningOn) schedDaily(cfg.eveningTime||'16:00','🌆 أذكار المساء','حان وقت أذكار المساء — اختم نهارك بذكر الله','/BASMAH/');
+
+    /* Prayer notifications */
+    if(cfg.prayerOn){
+      const PNAMES={Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
+      const savedCity=localStorage.getItem('basma_city');
+      const city=savedCity?JSON.parse(savedCity):{lat:21.3891,lng:39.8579};
+      const method=parseInt(localStorage.getItem('basma_method')||'4');
+      const now=new Date();
+      const dd=String(now.getDate()).padStart(2,'0');
+      const mm=String(now.getMonth()+1).padStart(2,'0');
+      const yyyy=now.getFullYear();
+      fetch(`https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${city.lat}&longitude=${city.lng}&method=${method}`)
+        .then(r=>r.json()).then(data=>{
+          if(data.code!==200) return;
+          const timings=data.data.timings;
+          const before=parseInt(cfg.prayerBefore||10)*60*1000;
+          Object.entries(PNAMES).forEach(([k,name])=>{
+            if(cfg.prayers&&!cfg.prayers[k]) return;
+            const [ph,pm]=timings[k].split(':').map(Number);
+            const target=new Date();target.setHours(ph,pm,0,0);
+            const fireAt=new Date(target-before);
+            if(fireAt>now){
+              const t=setTimeout(()=>{ fire(`🕌 ${name}`,`تبقّى ${cfg.prayerBefore||10} دقائق على صلاة ${name}`,'/BASMAH/prayer.html'); },fireAt-now);
+              window._basmaNfTimers.push(t);
+            }
+          });
+        }).catch(e=>{});
+    }
+  }
+
+  /* Run immediately and re-run every 30 min to stay fresh */
+  scheduleNotifications();
+  setInterval(scheduleNotifications, 30*60*1000);
+
+  /* Re-schedule when settings change */
+  window.addEventListener('storage', e=>{
+    if(e.key==='basma_notify') scheduleNotifications();
+  });
+})();
+
+</script>
 
 <script>
 if('serviceWorker' in navigator){

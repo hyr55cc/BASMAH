@@ -21,6 +21,12 @@
   --accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;
   --border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);
 }
+
+body.theme-green{--bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;--accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;--border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13)}
+body.theme-blue {--bg:#eef2fa;--card:#f7f9fe;--accent:#5b7baa;--accent-light:#90afd4;--accent-dark:#3a5880;--text:#1e2d40;--text-muted:#6a82a0;--border:#c0d0e8;--gold:#7a6030;--shadow:rgba(91,123,170,.13)}
+body.theme-sand {--bg:#f2ece0;--card:#faf6ee;--accent:#a07850;--accent-light:#c8a87a;--accent-dark:#6e5030;--text:#3a2c18;--text-muted:#9a7a50;--border:#ddd0b8;--gold:#b07030;--shadow:rgba(160,120,80,.13)}
+body.theme-rose {--bg:#f7f0f2;--card:#fdf8f9;--accent:#9a6070;--accent-light:#c490a0;--accent-dark:#703040;--text:#3a1820;--text-muted:#9a7080;--border:#e0c8d0;--gold:#a07848;--shadow:rgba(154,96,112,.13)}
+
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;direction:rtl}
 
@@ -136,6 +142,14 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 </style>
 </head>
 <body>
+<script>
+/* Apply saved theme immediately to avoid flash */
+(function(){
+  const t = localStorage.getItem('basma_theme') || 'green';
+  document.body.classList.add('theme-' + t);
+})();
+</script>
+
 
 <!-- NAV -->
 <div class="nav">
