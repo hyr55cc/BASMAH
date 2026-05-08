@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>بسمة — إعدادات الإشعارات</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6b8f71">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="بسمة">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -476,14 +482,16 @@ async function schedulePrayers(){
   }catch(e){}
 }
 
-function fireNotification(title, body){
+function fireNotification(title, body, url){
   if(Notification.permission!=='granted') return;
-  new Notification(title,{
-    body,
-    icon:'favicon.png',
-    badge:'favicon.png',
-    silent:true // we play our own sound
-  });
+  // Use SW for better background support
+  if(navigator.serviceWorker?.controller){
+    navigator.serviceWorker.controller.postMessage({
+      type:'FIRE_NOTIFICATION', title, body, url: url||'/BASMAH/'
+    });
+  } else {
+    new Notification(title,{body, icon:'favicon.png', silent:true});
+  }
 }
 
 /* ════════════════ TEST ════════════════ */
@@ -507,5 +515,22 @@ loadCfg();
 renderUI();
 scheduleAll();
 </script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/BASMAH/sw.js', {scope:'/BASMAH/'})
+      .then(reg => {
+        console.log('SW registered');
+        // Send scheduled notifications config every minute
+        setInterval(()=>{
+          const cfg = JSON.parse(localStorage.getItem('basma_notify')||'{}');
+          reg.active?.postMessage({type:'SCHEDULE_NOTIFICATIONS', cfg});
+        }, 60000);
+      });
+  });
+}
+</script>
+
 </body>
 </html>
