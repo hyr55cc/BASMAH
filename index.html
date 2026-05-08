@@ -429,15 +429,18 @@ function resetAll(){const cat=currentCat();AZKAR[cat].forEach((_,i)=>state[key(c
 function setTheme(t,btn){
   document.body.className=document.body.className.replace(/theme-\w+/,'')+` theme-${t}`;
   document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  localStorage.setItem('basma_theme', t);
 }
 function setFont(f,btn){
   document.documentElement.style.setProperty('--zikr-font',`'${f}', serif`);
   document.querySelectorAll('.ctrl-btn[data-f]').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
   document.querySelectorAll('.zikr-text').forEach(el=>el.style.fontFamily=`'${f}', serif`);
+  localStorage.setItem('basma_font', f);
 }
 function setSize(s,btn){
   document.body.className=document.body.className.replace(/fs-\w+/,'')+` ${s}`;
   document.querySelectorAll('.ctrl-btn[data-s]').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  localStorage.setItem('basma_size', s);
 }
 
 /* ════════════════ DUA WALL — Firebase Firestore ════════════════ */
@@ -565,7 +568,16 @@ function updateTime(){
 
 /* ════════════════ INIT ════════════════ */
 (function(){
-  setFont('Tajawal',document.querySelector('.ctrl-btn[data-f="Tajawal"]'));
+  /* load saved font */
+  const savedFont  = localStorage.getItem('basma_font')  || 'Tajawal';
+  const savedSize  = localStorage.getItem('basma_size')  || 'fs-md';
+  const savedTheme = localStorage.getItem('basma_theme') || 'green';
+  const fontBtn  = document.querySelector(`.ctrl-btn[data-f="${savedFont}"]`)  || document.querySelector('.ctrl-btn[data-f="Tajawal"]');
+  const sizeBtn  = document.querySelector(`.ctrl-btn[data-s="${savedSize}"]`)  || document.querySelector('.ctrl-btn[data-s="fs-md"]');
+  const themeBtn = document.querySelector(`.theme-btn[data-t="${savedTheme}"]`)|| document.querySelector('.theme-btn[data-t="green"]');
+  setFont(savedFont, fontBtn);
+  setSize(savedSize, sizeBtn);
+  setTheme(savedTheme, themeBtn);
   const now=new Date(); autoTab=getAutoTab(now.getHours(),now.getMinutes());
   initState(autoTab); updateTabs(); buildCards(autoTab); updateTime();
   fetchNextPrayer();
