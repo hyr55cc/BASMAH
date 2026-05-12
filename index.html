@@ -47,6 +47,103 @@ body.theme-rose {--bg:#f7f0f2;--card:#fdf8f9;--accent:#9a6070;--accent-light:#c4
 .ayah-text{font-family:'Amiri',serif;font-size:20px;line-height:2;margin-bottom:8px;text-align:right}
 .ayah-source{font-size:11px;opacity:.75;text-align:left;font-family:var(--ui-font)}
 
+
+/* ── DHUL HIJJA BANNER ── */
+.dhulhijja-banner{
+  max-width:580px;margin:10px auto 0;padding:0 14px;
+}
+.dhulhijja-inner{
+  background:linear-gradient(135deg,#2c5364,#203a43,#0f2027);
+  border-radius:14px;padding:16px 18px;color:#fff;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 4px 18px rgba(15,32,39,.4);cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.dhulhijja-inner::before{
+  content:'🌙';position:absolute;left:-5px;bottom:-10px;
+  font-size:80px;opacity:.1;
+}
+.dhulhijja-count{
+  background:rgba(255,255,255,.15);border-radius:12px;
+  padding:8px 14px;text-align:center;flex-shrink:0;
+}
+.dhulhijja-day-num{font-family:'Amiri',serif;font-size:32px;font-weight:700;line-height:1}
+.dhulhijja-day-lbl{font-size:10px;opacity:.8;font-family:var(--ui-font);margin-top:2px}
+.dhulhijja-info{flex:1}
+.dhulhijja-title{font-size:16px;font-weight:700;margin-bottom:4px;font-family:var(--ui-font)}
+.dhulhijja-takbeer{font-family:'Amiri',serif;font-size:14px;line-height:1.8;opacity:.9}
+.dhulhijja-tap{font-size:11px;opacity:.65;margin-top:6px;font-family:var(--ui-font)}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal-box{
+  background:var(--card);border-radius:24px 24px 0 0;
+  padding:0 0 40px;width:100%;max-width:600px;
+  max-height:90vh;overflow-y:auto;
+  transform:translateY(40px);transition:transform .35s;
+}
+.modal-overlay.show .modal-box{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:12px auto}
+.modal-header{
+  background:linear-gradient(135deg,#2c5364,#203a43);
+  color:#fff;padding:20px 20px 18px;margin-bottom:0;
+  text-align:center;
+}
+.modal-header h2{font-family:'Amiri',serif;font-size:26px;margin-bottom:4px}
+.modal-header p{font-size:12px;opacity:.8;font-family:var(--ui-font);line-height:1.6}
+.modal-close{
+  position:absolute;left:16px;top:16px;
+  width:30px;height:30px;border-radius:50%;
+  border:none;background:rgba(255,255,255,.2);color:#fff;
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.modal-header{position:relative}
+.modal-content{padding:16px 16px 0}
+.modal-section{margin-bottom:20px}
+.modal-section-title{
+  font-size:13px;font-weight:700;color:var(--accent-dark);
+  font-family:var(--ui-font);margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.fadheela-card{
+  background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:8px;
+  position:relative;
+}
+.fadheela-card::before{
+  content:'';position:absolute;right:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#2c5364,#203a43);border-radius:0 12px 12px 0;
+}
+.fadheela-text{font-family:'Amiri',serif;font-size:17px;line-height:1.9;color:var(--text);direction:rtl;text-align:right}
+.fadheela-source{font-size:11px;color:var(--text-muted);font-family:var(--ui-font);margin-top:5px;text-align:right}
+.takbeer-box{
+  background:linear-gradient(135deg,#2c5364,#203a43);
+  border-radius:14px;padding:18px 20px;color:#fff;text-align:center;
+  margin-bottom:8px;
+}
+.takbeer-text{font-family:'Amiri',serif;font-size:20px;line-height:2.2}
+.amal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.amal-item{
+  background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;display:flex;align-items:flex-start;gap:8px;
+}
+.amal-icon{font-size:20px;flex-shrink:0}
+.amal-text{font-size:13px;color:var(--text);font-family:var(--ui-font);line-height:1.5;font-weight:600}
+.amal-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+.days-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.day-badge{
+  padding:5px 10px;border-radius:20px;font-size:11px;
+  background:var(--bg);border:1px solid var(--border);
+  color:var(--text-muted);font-family:var(--ui-font);
+}
+.day-badge.today{background:#2c5364;color:#fff;border-color:#2c5364;font-weight:700}
+
 /* ── FRIDAY BANNER ── */
 .friday-banner{
   max-width:580px;margin:10px auto 0;padding:0 14px;
@@ -251,6 +348,137 @@ body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-heigh
   <div class="divider"></div>
 </div>
 
+
+<!-- DHUL HIJJA SECTION -->
+<div id="dhulhijjaSection" style="display:none">
+  <div class="dhulhijja-banner" onclick="openDhulhijjaModal()">
+    <div class="dhulhijja-inner">
+      <div class="dhulhijja-count">
+        <div class="dhulhijja-day-num" id="dhDayNum">1</div>
+        <div class="dhulhijja-day-lbl">ذو الحجة</div>
+      </div>
+      <div class="dhulhijja-info">
+        <div class="dhulhijja-title">🌙 أيام العشر المباركة</div>
+        <div class="dhulhijja-takbeer">اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ لَا إِلَهَ إِلَّا اللَّهُ<br>وَاللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ</div>
+        <div class="dhulhijja-tap">اضغط لمعرفة فضائل هذه الأيام</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DHUL HIJJA MODAL -->
+<div class="modal-overlay" id="dhulhijjaModal" onclick="closeDhulhijjaModal(event)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeDhulhijjaModal()">✕</button>
+      <h2>🌙 العشر من ذي الحجة</h2>
+      <p>أفضل أيام الدنيا عند الله تعالى</p>
+    </div>
+    <div class="modal-content">
+
+      <!-- فضائل -->
+      <div class="modal-section">
+        <div class="modal-section-title">⭐ فضائل هذه الأيام</div>
+        <div class="fadheela-card">
+          <div class="fadheela-text">﴿ وَالْفَجْرِ ۝ وَلَيَالٍ عَشْرٍ ﴾</div>
+          <div class="fadheela-source">سورة الفجر — أقسم الله بهذه الأيام العشر</div>
+        </div>
+        <div class="fadheela-card">
+          <div class="fadheela-text">«مَا مِنْ أَيَّامٍ الْعَمَلُ الصَّالِحُ فِيهَا أَحَبُّ إِلَى اللَّهِ مِنْ هَذِهِ الْأَيَّامِ الْعَشْرِ»</div>
+          <div class="fadheela-source">رواه البخاري — أحب الأيام إلى الله</div>
+        </div>
+        <div class="fadheela-card">
+          <div class="fadheela-text">يوم عرفة (التاسع من ذي الحجة) أعظم أيام السنة — صيامه يكفّر ذنوب سنتين</div>
+          <div class="fadheela-source">رواه مسلم</div>
+        </div>
+        <div class="fadheela-card">
+          <div class="fadheela-text">يوم النحر (العاشر) أعظم أيام الله وسيد أيام السنة عند الله</div>
+          <div class="fadheela-source">رواه أبو داود وابن حبان</div>
+        </div>
+      </div>
+
+      <!-- التكبير -->
+      <div class="modal-section">
+        <div class="modal-section-title">📢 التكبير المطلق</div>
+        <div class="takbeer-box">
+          <div class="takbeer-text">اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ لَا إِلَهَ إِلَّا اللَّهُ<br>وَاللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ</div>
+        </div>
+        <div class="fadheela-card">
+          <div class="fadheela-text">كان ابن عمر وأبو هريرة رضي الله عنهما يخرجان إلى السوق فيكبّران ويكبّر الناس بتكبيرهما</div>
+          <div class="fadheela-source">رواه البخاري — يُسنّ الجهر بالتكبير في هذه الأيام</div>
+        </div>
+      </div>
+
+      <!-- أفضل الأعمال -->
+      <div class="modal-section">
+        <div class="modal-section-title">✨ أفضل الأعمال في هذه الأيام</div>
+        <div class="amal-grid">
+          <div class="amal-item">
+            <div class="amal-icon">📿</div>
+            <div>
+              <div class="amal-text">التكبير والتهليل والتحميد</div>
+              <div class="amal-sub">أحب العمل إلى الله</div>
+            </div>
+          </div>
+          <div class="amal-item">
+            <div class="amal-icon">🌅</div>
+            <div>
+              <div class="amal-text">صيام التسع</div>
+              <div class="amal-sub">خاصة يوم عرفة</div>
+            </div>
+          </div>
+          <div class="amal-item">
+            <div class="amal-icon">📖</div>
+            <div>
+              <div class="amal-text">قراءة القرآن</div>
+              <div class="amal-sub">وكثرة الذكر</div>
+            </div>
+          </div>
+          <div class="amal-item">
+            <div class="amal-icon">🤲</div>
+            <div>
+              <div class="amal-text">الدعاء والاستغفار</div>
+              <div class="amal-sub">خاصة يوم عرفة</div>
+            </div>
+          </div>
+          <div class="amal-item">
+            <div class="amal-icon">💝</div>
+            <div>
+              <div class="amal-text">الصدقة</div>
+              <div class="amal-sub">ولو بالقليل</div>
+            </div>
+          </div>
+          <div class="amal-item">
+            <div class="amal-icon">🐑</div>
+            <div>
+              <div class="amal-text">الأضحية</div>
+              <div class="amal-sub">يوم العيد</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- الأيام العشرة -->
+      <div class="modal-section">
+        <div class="modal-section-title">📅 الأيام العشرة</div>
+        <div class="days-row" id="dhDaysRow"></div>
+      </div>
+
+      <!-- دعاء يوم عرفة -->
+      <div class="modal-section">
+        <div class="modal-section-title">🤲 أفضل دعاء يوم عرفة</div>
+        <div class="takbeer-box">
+          <div class="takbeer-text">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ<br>لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</div>
+        </div>
+        <div class="fadheela-source" style="text-align:center;margin-top:8px;color:var(--text-muted);font-family:var(--ui-font);font-size:12px">
+          خير الدعاء دعاء يوم عرفة — رواه الترمذي
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- AYAH OF THE DAY -->
 <div class="ayah-card" id="ayahCard">
@@ -678,6 +906,7 @@ function updateTime(){
   const now=new Date(); autoTab=getAutoTab(now.getHours(),now.getMinutes());
   initState(autoTab); updateTabs(); buildCards(autoTab); updateTime();
   fetchNextPrayer();
+  initDhulHijja();
   setInterval(updateTime,30000);
   setInterval(fetchNextPrayer, 300000);
   if(currentCat()==='other'){document.getElementById('duaWall').style.display='block';loadDuas()}
@@ -692,8 +921,66 @@ window.tapCheck      = tapCheck;
 window.tapDot        = tapDot;
 window.tapBox        = tapBox;
 window.resetAll      = resetAll;
-window.sendDua       = sendDua;
+window.sendDua            = sendDua;
+window.openDhulhijjaModal = openDhulhijjaModal;
+window.closeDhulhijjaModal= closeDhulhijjaModal;
 
+
+/* ════════════════ DHUL HIJJA ════════════════ */
+/* 
+  لتحديد أيام العشر نستخدم API التقويم الهجري
+  الأيام 1-10 من ذي الحجة
+*/
+async function initDhulHijja(){
+  try{
+    const now = new Date();
+    const dd=String(now.getDate()).padStart(2,'0');
+    const mm=String(now.getMonth()+1).padStart(2,'0');
+    const yyyy=now.getFullYear();
+    const res = await fetch(`https://api.aladhan.com/v1/gToH/${dd}-${mm}-${yyyy}`);
+    const data = await res.json();
+    if(data.code!==200) return;
+    const hijri = data.data.hijri;
+    const hMonth = parseInt(hijri.month.number); // 12 = ذو الحجة
+    const hDay   = parseInt(hijri.day);
+    
+    if(hMonth === 12 && hDay >= 1 && hDay <= 10){
+      // نحن في العشر الأوائل!
+      document.getElementById('dhulhijjaSection').style.display = 'block';
+      document.getElementById('dhDayNum').textContent = hDay;
+      
+      // بناء صف الأيام
+      const row = document.getElementById('dhDaysRow');
+      row.innerHTML = '';
+      const dayNames = ['','الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','يوم عرفة','يوم النحر'];
+      for(let d=1;d<=10;d++){
+        const badge = document.createElement('div');
+        badge.className = 'day-badge' + (d===hDay?' today':'') + (d===9?' day-arafa':'') + (d===10?' day-nahr':'');
+        badge.textContent = dayNames[d];
+        if(d===9) badge.textContent = '⭐ '+dayNames[d];
+        if(d===10) badge.textContent = '🐑 '+dayNames[d];
+        row.appendChild(badge);
+      }
+    } else {
+      document.getElementById('dhulhijjaSection').style.display = 'none';
+    }
+  }catch(e){
+    // fallback — hide silently
+    document.getElementById('dhulhijjaSection').style.display = 'none';
+  }
+}
+
+function openDhulhijjaModal(){
+  document.getElementById('dhulhijjaModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDhulhijjaModal(e){
+  if(!e || e.target === document.getElementById('dhulhijjaModal') || e.target.classList.contains('modal-close')){
+    document.getElementById('dhulhijjaModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+}
 
 /* ════════════════ AYAH OF THE DAY ════════════════ */
 const AYAHS = [
