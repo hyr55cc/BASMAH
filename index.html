@@ -60,7 +60,17 @@ body.dark .ayah-inner { background:linear-gradient(135deg,#1a2e20,#243828); }
 body.dark .friday-inner { background:linear-gradient(135deg,#3a2a10,#4a3818); }
 body.dark .top-bar { border-bottom-color:var(--border); }
 body.dark .nav-link { color:var(--text-muted); }
-body.dark .moon-btn { background:var(--accent); color:#0f1117; }
+.moon-btn {
+  width:22px; height:22px; border-radius:50%;
+  border: 2.5px solid transparent;
+  background: linear-gradient(135deg,#1a1a2e,#2c3e50);
+  font-size:11px; cursor:pointer;
+  transition: transform .2s, border-color .2s;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; padding:0; line-height:1;
+}
+.moon-btn:hover { transform:scale(1.2); }
+body.dark .moon-btn { background:linear-gradient(135deg,#c8a86a,#b5955a); border-color:var(--gold); }
 
 body.theme-green{--bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;--accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;--border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);--check-idle:#c8d8ca;--check-done:#6b8f71}
 body.theme-blue {--bg:#eef2fa;--card:#f7f9fe;--accent:#5b7baa;--accent-light:#90afd4;--accent-dark:#3a5880;--text:#1e2d40;--text-muted:#6a82a0;--border:#c0d0e8;--gold:#7a6030;--shadow:rgba(91,123,170,.13);--check-idle:#b8cbdf;--check-done:#5b7baa}
@@ -344,6 +354,7 @@ body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-heigh
       <button class="theme-btn" data-t="blue"  onclick="setTheme('blue',this)"></button>
       <button class="theme-btn" data-t="sand"  onclick="setTheme('sand',this)"></button>
       <button class="theme-btn" data-t="rose"  onclick="setTheme('rose',this)"></button>
+      <button class="moon-btn" id="darkBtn" onclick="toggleDark()" title="الوضع الليلي">🌙</button>
     </div>
     <div class="sep"></div>
     <span class="ctrl-label">🔤 الخط:</span>
@@ -361,8 +372,6 @@ body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-heigh
       <button class="ctrl-btn"        data-s="fs-lg" onclick="setSize('fs-lg',this)">ك</button>
       <button class="ctrl-btn"        data-s="fs-xl" onclick="setSize('fs-xl',this)">ك+</button>
     </div>
-    <div class="sep"></div>
-    <button class="ctrl-btn moon-btn" id="darkBtn" onclick="toggleDark()" title="الوضع الليلي" style="font-size:15px;padding:3px 8px">🌙</button>
   </div>
 </div>
 
