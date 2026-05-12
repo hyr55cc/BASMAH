@@ -24,6 +24,44 @@
   --check-idle:#c8d8ca;--check-done:#6b8f71;
   --zikr-font:'Amiri',serif;--ui-font:'Tajawal',sans-serif;
 }
+
+/* ── DARK MODE ── */
+body.dark {
+  --bg:#0f1117;--card:#1a1d26;--accent:#7aaa85;--accent-light:#4a7a55;
+  --accent-dark:#a8d4b0;--text:#e8ede9;--text-muted:#8a9e8d;
+  --border:#2a3330;--gold:#c8a86a;--shadow:rgba(0,0,0,.4);
+  --check-idle:#3a4a3d;--check-done:#7aaa85;
+}
+body.dark.theme-green {
+  --bg:#0f1117;--card:#1a1d26;--accent:#7aaa85;--accent-light:#4a7a55;
+  --accent-dark:#a8d4b0;--text:#e8ede9;--text-muted:#8a9e8d;
+  --border:#2a3330;--gold:#c8a86a;--shadow:rgba(0,0,0,.4);
+}
+body.dark.theme-blue {
+  --bg:#0d1221;--card:#151b2e;--accent:#7a9fcc;--accent-light:#3a5a88;
+  --accent-dark:#a0c4e8;--text:#d8e4f0;--text-muted:#6a85a8;
+  --border:#1e2d45;--gold:#a08848;
+}
+body.dark.theme-sand {
+  --bg:#1a1410;--card:#231e18;--accent:#c0986a;--accent-light:#7a5830;
+  --accent-dark:#e0b888;--text:#ece0d0;--text-muted:#a08060;
+  --border:#3a3028;--gold:#d09050;
+}
+body.dark.theme-rose {
+  --bg:#1a1018;--card:#221520;--accent:#c08090;--accent-light:#804050;
+  --accent-dark:#e0a8b8;--text:#ecdde8;--text-muted:#a07080;
+  --border:#382030;--gold:#b08860;
+}
+
+/* Dark mode text brightness boost for Arabic */
+body.dark .zikr-text { color:#f0f5f0; letter-spacing:0.02em; }
+body.dark .zikr-source { color:#7a9e7d; }
+body.dark .ayah-inner { background:linear-gradient(135deg,#1a2e20,#243828); }
+body.dark .friday-inner { background:linear-gradient(135deg,#3a2a10,#4a3818); }
+body.dark .top-bar { border-bottom-color:var(--border); }
+body.dark .nav-link { color:var(--text-muted); }
+body.dark .moon-btn { background:var(--accent); color:#0f1117; }
+
 body.theme-green{--bg:#f5f0e8;--card:#fffdf7;--accent:#6b8f71;--accent-light:#a8c5ae;--accent-dark:#4a6b50;--text:#2d3a2e;--text-muted:#7a8c7b;--border:#d8e8da;--gold:#b5955a;--shadow:rgba(107,143,113,.13);--check-idle:#c8d8ca;--check-done:#6b8f71}
 body.theme-blue {--bg:#eef2fa;--card:#f7f9fe;--accent:#5b7baa;--accent-light:#90afd4;--accent-dark:#3a5880;--text:#1e2d40;--text-muted:#6a82a0;--border:#c0d0e8;--gold:#7a6030;--shadow:rgba(91,123,170,.13);--check-idle:#b8cbdf;--check-done:#5b7baa}
 body.theme-sand {--bg:#f2ece0;--card:#faf6ee;--accent:#a07850;--accent-light:#c8a87a;--accent-dark:#6e5030;--text:#3a2c18;--text-muted:#9a7a50;--border:#ddd0b8;--gold:#b07030;--shadow:rgba(160,120,80,.13);--check-idle:#d8c8a8;--check-done:#a07850}
@@ -323,6 +361,8 @@ body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-heigh
       <button class="ctrl-btn"        data-s="fs-lg" onclick="setSize('fs-lg',this)">ك</button>
       <button class="ctrl-btn"        data-s="fs-xl" onclick="setSize('fs-xl',this)">ك+</button>
     </div>
+    <div class="sep"></div>
+    <button class="ctrl-btn moon-btn" id="darkBtn" onclick="toggleDark()" title="الوضع الليلي" style="font-size:15px;padding:3px 8px">🌙</button>
   </div>
 </div>
 
@@ -903,6 +943,12 @@ function updateTime(){
   setFont(savedFont, fontBtn);
   setSize(savedSize, sizeBtn);
   setTheme(savedTheme, themeBtn);
+  /* restore dark mode */
+  const isDark = localStorage.getItem('basma_dark')==='1';
+  if(isDark){
+    document.body.classList.add('dark');
+    const db=document.getElementById('darkBtn'); if(db) db.textContent='☀️';
+  }
   const now=new Date(); autoTab=getAutoTab(now.getHours(),now.getMinutes());
   initState(autoTab); updateTabs(); buildCards(autoTab); updateTime();
   fetchNextPrayer();
@@ -924,6 +970,10 @@ window.resetAll      = resetAll;
 window.sendDua            = sendDua;
 window.openDhulhijjaModal = openDhulhijjaModal;
 window.closeDhulhijjaModal= closeDhulhijjaModal;
+window.toggleDark         = toggleDark;
+window.openContactModal   = openContactModal;
+window.closeContactModal  = closeContactModal;
+window.submitContact      = submitContact;
 
 
 /* ════════════════ DHUL HIJJA ════════════════ */
@@ -980,6 +1030,77 @@ function closeDhulhijjaModal(e){
     document.getElementById('dhulhijjaModal').classList.remove('show');
     document.body.style.overflow = '';
   }
+}
+
+
+/* ════════════════ DARK MODE ════════════════ */
+function toggleDark(){
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('basma_dark', isDark ? '1' : '0');
+  const btn = document.getElementById('darkBtn');
+  if(btn) btn.textContent = isDark ? '☀️' : '🌙';
+}
+
+/* ════════════════ CONTACT MODAL ════════════════ */
+function openContactModal(){
+  document.getElementById('contactModal').classList.add('show');
+  document.getElementById('contactSuccess').style.display='none';
+  document.getElementById('contactForm').style.display='block';
+  document.body.style.overflow='hidden';
+}
+
+function closeContactModal(e){
+  if(!e || e.target===document.getElementById('contactModal') || e.target.classList.contains('modal-close')){
+    document.getElementById('contactModal').classList.remove('show');
+    document.body.style.overflow='';
+  }
+}
+
+async function submitContact(){
+  const name    = document.getElementById('cName').value.trim();
+  const subject = document.getElementById('cSubject').value.trim();
+  const message = document.getElementById('cMessage').value.trim();
+  const errEl   = document.getElementById('cError');
+  const btn     = document.getElementById('cSendBtn');
+
+  errEl.style.display='none';
+  if(!name || !subject || !message){
+    errEl.textContent='يرجى ملء جميع الحقول';
+    errEl.style.display='block';
+    return;
+  }
+
+  btn.disabled=true; btn.textContent='جاري الإرسال...';
+
+  try{
+    // Using formsubmit.co — free email service, no backend needed
+    const fd = new FormData();
+    fd.append('_to',      'halfofthird@gmail.com');
+    fd.append('_subject', `[بسمة] ${subject}`);
+    fd.append('_template','table');
+    fd.append('_captcha', 'false');
+    fd.append('الاسم',    name);
+    fd.append('الموضوع',  subject);
+    fd.append('الرسالة',  message);
+
+    const res = await fetch('https://formsubmit.co/ajax/halfofthird@gmail.com', {
+      method:'POST',
+      headers:{'Accept':'application/json'},
+      body: fd
+    });
+    const data = await res.json();
+
+    if(data.success==='true' || data.success===true){
+      document.getElementById('contactForm').style.display='none';
+      document.getElementById('contactSuccess').style.display='block';
+    } else {
+      throw new Error('failed');
+    }
+  }catch(e){
+    errEl.textContent='حدث خطأ في الإرسال، يرجى المحاولة مجدداً';
+    errEl.style.display='block';
+  }
+  btn.disabled=false; btn.textContent='إرسال الرسالة 💌';
 }
 
 /* ════════════════ AYAH OF THE DAY ════════════════ */
@@ -1205,6 +1326,57 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
+
+
+<!-- CONTACT SECTION -->
+<div style="max-width:580px;margin:0 auto;padding:0 14px 30px">
+  <div style="height:1px;background:var(--border);margin-bottom:20px"></div>
+  <div onclick="openContactModal()" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:0 2px 10px var(--shadow);transition:all .2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+    <div style="font-size:28px">💌</div>
+    <div style="flex:1">
+      <div style="font-size:15px;font-weight:700;color:var(--accent-dark);font-family:var(--ui-font);margin-bottom:3px">تواصل معنا</div>
+      <div style="font-size:12px;color:var(--text-muted);font-family:var(--ui-font)">اقتراحات أو ملاحظات؟ نسعد بسماعك</div>
+    </div>
+    <div style="font-size:18px;color:var(--text-muted)">←</div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal" onclick="closeContactModal(event)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header" style="background:linear-gradient(135deg,var(--accent-dark),var(--accent))">
+      <button class="modal-close" onclick="closeContactModal()">✕</button>
+      <h2 style="font-family:'Amiri',serif;font-size:24px;color:#fff;margin-bottom:4px">💌 تواصل معنا</h2>
+      <p style="font-size:12px;color:rgba(255,255,255,.8);font-family:var(--ui-font)">نسعد بسماع اقتراحاتك وملاحظاتك</p>
+    </div>
+    <div class="modal-content" style="padding:20px 16px">
+      <div id="contactSuccess" style="display:none;text-align:center;padding:30px 20px">
+        <div style="font-size:48px;margin-bottom:12px">✅</div>
+        <div style="font-family:'Amiri',serif;font-size:22px;color:var(--accent-dark);margin-bottom:8px">تم إرسال رسالتك!</div>
+        <div style="font-size:13px;color:var(--text-muted);font-family:var(--ui-font)">شكراً لتواصلك معنا، سنرد عليك قريباً إن شاء الله</div>
+      </div>
+      <div id="contactForm">
+        <div style="margin-bottom:14px">
+          <label style="font-size:13px;color:var(--text-muted);font-family:var(--ui-font);display:block;margin-bottom:6px">الاسم</label>
+          <input type="text" id="cName" placeholder="اسمك" style="width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--ui-font);font-size:14px;outline:none;direction:rtl" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:13px;color:var(--text-muted);font-family:var(--ui-font);display:block;margin-bottom:6px">الموضوع</label>
+          <input type="text" id="cSubject" placeholder="موضوع الرسالة" style="width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--ui-font);font-size:14px;outline:none;direction:rtl" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+        <div style="margin-bottom:18px">
+          <label style="font-size:13px;color:var(--text-muted);font-family:var(--ui-font);display:block;margin-bottom:6px">الرسالة</label>
+          <textarea id="cMessage" placeholder="اكتب رسالتك هنا..." rows="4" style="width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--ui-font);font-size:14px;outline:none;direction:rtl;resize:none;line-height:1.7" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+        <button onclick="submitContact()" id="cSendBtn" style="width:100%;padding:13px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-family:var(--ui-font);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s">
+          إرسال الرسالة 💌
+        </button>
+        <div id="cError" style="display:none;margin-top:10px;padding:10px 14px;background:#fde8e8;border-radius:8px;font-size:12px;color:#c0392b;font-family:var(--ui-font);text-align:center"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
