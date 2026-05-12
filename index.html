@@ -29,6 +29,55 @@ body.theme-blue {--bg:#eef2fa;--card:#f7f9fe;--accent:#5b7baa;--accent-light:#90
 body.theme-sand {--bg:#f2ece0;--card:#faf6ee;--accent:#a07850;--accent-light:#c8a87a;--accent-dark:#6e5030;--text:#3a2c18;--text-muted:#9a7a50;--border:#ddd0b8;--gold:#b07030;--shadow:rgba(160,120,80,.13);--check-idle:#d8c8a8;--check-done:#a07850}
 body.theme-rose {--bg:#f7f0f2;--card:#fdf8f9;--accent:#9a6070;--accent-light:#c490a0;--accent-dark:#703040;--text:#3a1820;--text-muted:#9a7080;--border:#e0c8d0;--gold:#a07848;--shadow:rgba(154,96,112,.13);--check-idle:#ddc0c8;--check-done:#9a6070}
 
+
+/* ── AYAH OF THE DAY ── */
+.ayah-card{
+  max-width:580px;margin:10px auto 0;padding:0 14px;
+}
+.ayah-inner{
+  background:linear-gradient(135deg,var(--accent-dark),var(--accent));
+  border-radius:14px;padding:16px 20px;color:#fff;
+  box-shadow:0 3px 14px var(--shadow);position:relative;overflow:hidden;
+}
+.ayah-inner::before{
+  content:'﷽';position:absolute;left:-10px;top:-10px;
+  font-size:80px;opacity:.07;font-family:'Amiri',serif;
+}
+.ayah-label{font-size:11px;opacity:.8;margin-bottom:8px;font-family:var(--ui-font);letter-spacing:.5px}
+.ayah-text{font-family:'Amiri',serif;font-size:20px;line-height:2;margin-bottom:8px;text-align:right}
+.ayah-source{font-size:11px;opacity:.75;text-align:left;font-family:var(--ui-font)}
+
+/* ── FRIDAY BANNER ── */
+.friday-banner{
+  max-width:580px;margin:10px auto 0;padding:0 14px;
+}
+.friday-inner{
+  background:linear-gradient(135deg,#b5955a,#8a6a30);
+  border-radius:14px;padding:14px 18px;color:#fff;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 3px 14px rgba(181,149,90,.3);cursor:pointer;
+  text-decoration:none;
+}
+.friday-icon{font-size:28px;flex-shrink:0}
+.friday-info{flex:1}
+.friday-title{font-size:15px;font-weight:700;margin-bottom:3px;font-family:var(--ui-font)}
+.friday-sub{font-size:12px;opacity:.85;font-family:var(--ui-font)}
+
+/* ── SALAH FRIDAY ── */
+.salah-friday{
+  max-width:580px;margin:10px auto 0;padding:0 14px;
+}
+.salah-inner{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 2px 10px var(--shadow);
+}
+.salah-icon{font-size:26px;flex-shrink:0}
+.salah-info{flex:1}
+.salah-title{font-size:15px;font-weight:700;color:var(--accent-dark);margin-bottom:3px;font-family:var(--ui-font)}
+.salah-sub{font-size:12px;color:var(--text-muted);font-family:var(--ui-font)}
+
 body.fs-sm .zikr-text{font-size:17px!important}
 body.fs-md .zikr-text{font-size:21px!important}
 body.fs-lg .zikr-text{font-size:25px!important}
@@ -200,6 +249,54 @@ body{font-family:var(--ui-font);background:var(--bg);color:var(--text);min-heigh
     <span id="npIcon">🕌</span> <strong id="npName"></strong> الساعة <strong id="npTime"></strong> — بعد <span id="npRemain"></span>
   </div>
   <div class="divider"></div>
+</div>
+
+
+<!-- AYAH OF THE DAY -->
+<div class="ayah-card" id="ayahCard">
+  <div class="ayah-inner">
+    <div class="ayah-label">✨ آية اليوم</div>
+    <div class="ayah-text" id="ayahText">جاري التحميل...</div>
+    <div class="ayah-source" id="ayahSource"></div>
+  </div>
+</div>
+
+<!-- FRIDAY SPECIALS (shown only on Friday) -->
+<div id="fridaySection" style="display:none">
+  <!-- سورة الكهف -->
+  <div class="friday-banner">
+    <a href="kahf.html" class="friday-inner">
+      <div class="friday-icon">📖</div>
+      <div class="friday-info">
+        <div class="friday-title">سورة الكهف — يوم الجمعة</div>
+        <div class="friday-sub">اضغط لقراءة السورة كاملة</div>
+      </div>
+      <div style="font-size:18px;opacity:.8">←</div>
+    </a>
+  </div>
+  <!-- الصلاة على النبي -->
+  <div class="salah-friday">
+    <div class="salah-inner">
+      <div class="salah-icon">💚</div>
+      <div class="salah-info">
+        <div class="salah-title">اللهم صل على محمد ﷺ</div>
+        <div class="salah-sub" id="salahCount">أكثر من الصلاة على النبي يوم الجمعة</div>
+      </div>
+    </div>
+  </div>
+  <!-- ساعة الاستجابة -->
+  <div class="salah-friday" id="ijabaSection" style="display:none">
+    <div class="salah-inner" style="background:linear-gradient(135deg,var(--accent-dark),var(--accent));border:none">
+      <div class="salah-icon">🤲</div>
+      <div class="salah-info" style="color:#fff">
+        <div class="salah-title" style="color:#fff">⏰ ساعة الاستجابة الآن!</div>
+        <div class="salah-sub" style="color:rgba(255,255,255,.85)" id="ijabaRemain">ادعُ الله — آخر ساعة من نهار الجمعة</div>
+        <div style="margin-top:8px;font-family:'Amiri',serif;font-size:16px;color:#fff;line-height:1.8">
+          اللَّهُمَّ إِنَّكَ عَفُوٌّ كَرِيمٌ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- TABS -->
@@ -596,6 +693,115 @@ window.tapDot        = tapDot;
 window.tapBox        = tapBox;
 window.resetAll      = resetAll;
 window.sendDua       = sendDua;
+
+
+/* ════════════════ AYAH OF THE DAY ════════════════ */
+const AYAHS = [
+  {text:"وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ۖ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ",source:"البقرة — ١٨٦"},
+  {text:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ",source:"البقرة — ٢٥٥"},
+  {text:"وَبَشِّرِ الصَّابِرِينَ ﴿١٥٤﴾ الَّذِينَ إِذَا أَصَابَتْهُم مُّصِيبَةٌ قَالُوا إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ",source:"البقرة — ١٥٥"},
+  {text:"فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا",source:"الشرح — ٥-٦"},
+  {text:"وَتَوَكَّلْ عَلَى اللَّهِ ۚ وَكَفَىٰ بِاللَّهِ وَكِيلًا",source:"الأحزاب — ٣"},
+  {text:"وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ",source:"الطلاق — ٣"},
+  {text:"يَا أَيُّهَا الَّذِينَ آمَنُوا اسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",source:"البقرة — ١٥٣"},
+  {text:"وَقُل رَّبِّ زِدْنِي عِلْمًا",source:"طه — ١١٤"},
+  {text:"رَبِّ اشْرَحْ لِي صَدْرِي ﴿٢٥﴾ وَيَسِّرْ لِي أَمْرِي",source:"طه — ٢٥-٢٦"},
+  {text:"وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ",source:"النحل — ١٢٧"},
+  {text:"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",source:"الرعد — ٢٨"},
+  {text:"وَلَا تَيْأَسُوا مِن رَّوْحِ اللَّهِ ۖ إِنَّهُ لَا يَيْأَسُ مِن رَّوْحِ اللَّهِ إِلَّا الْقَوْمُ الْكَافِرُونَ",source:"يوسف — ٨٧"},
+  {text:"إِنَّ اللَّهَ مَعَ الَّذِينَ اتَّقَوا وَّالَّذِينَ هُم مُّحْسِنُونَ",source:"النحل — ١٢٨"},
+  {text:"وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ",source:"هود — ٨٨"},
+  {text:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",source:"آل عمران — ١٧٣"},
+  {text:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",source:"البقرة — ٢٠١"},
+  {text:"وَلَذِكْرُ اللَّهِ أَكْبَرُ",source:"العنكبوت — ٤٥"},
+  {text:"إِنَّ مَعَ الْعُسْرِ يُسْرًا",source:"الشرح — ٦"},
+  {text:"فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",source:"البقرة — ١٥٢"},
+  {text:"قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ ۚ إِنَّ اللَّهَ يَغْفِرُ الذُّنُوبَ جَمِيعًا",source:"الزمر — ٥٣"},
+  {text:"وَاللَّهُ غَالِبٌ عَلَىٰ أَمْرِهِ وَلَٰكِنَّ أَكْثَرَ النَّاسِ لَا يَعْلَمُونَ",source:"يوسف — ٢١"},
+  {text:"وَلَنَبْلُوَنَّكُم بِشَيْءٍ مِّنَ الْخَوْفِ وَالْجُوعِ وَنَقْصٍ مِّنَ الْأَمْوَالِ وَالْأَنفُسِ وَالثَّمَرَاتِ ۗ وَبَشِّرِ الصَّابِرِينَ",source:"البقرة — ١٥٥"},
+  {text:"وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ",source:"البقرة — ٢١٦"},
+  {text:"إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ",source:"التوبة — ١٢٠"},
+  {text:"وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ",source:"الحديد — ٤"},
+  {text:"وَإِن تَعُدُّوا نِعْمَةَ اللَّهِ لَا تُحْصُوهَا",source:"إبراهيم — ٣٤"},
+  {text:"سَنُرِيهِمْ آيَاتِنَا فِي الْآفَاقِ وَفِي أَنفُسِهِمْ حَتَّىٰ يَتَبَيَّنَ لَهُمْ أَنَّهُ الْحَقُّ",source:"فصلت — ٥٣"},
+  {text:"وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ",source:"القمر — ١٧"},
+  {text:"إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ سَيَجْعَلُ لَهُمُ الرَّحْمَٰنُ وُدًّا",source:"مريم — ٩٦"},
+  {text:"وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا ﴿٢﴾ وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ",source:"الطلاق — ٢-٣"},
+  {text:"فَسَتَذْكُرُونَ مَا أَقُولُ لَكُمْ ۚ وَأُفَوِّضُ أَمْرِي إِلَى اللَّهِ ۚ إِنَّ اللَّهَ بَصِيرٌ بِالْعِبَادِ",source:"غافر — ٤٤"},
+];
+
+function showAyah(){
+  const now = new Date();
+  // Use day of year as index so it changes daily at midnight
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff  = now - start;
+  const dayOfYear = Math.floor(diff / 86400000);
+  const idx   = dayOfYear % AYAHS.length;
+  const ayah  = AYAHS[idx];
+  document.getElementById('ayahText').textContent   = ayah.text;
+  document.getElementById('ayahSource').textContent = '— ' + ayah.source;
+
+  // Schedule refresh at midnight
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate()+1);
+  tomorrow.setHours(0,0,5,0);
+  setTimeout(showAyah, tomorrow - now);
+}
+
+/* ════════════════ FRIDAY FEATURES ════════════════ */
+function checkFriday(){
+  const now  = new Date();
+  const day  = now.getDay(); // 5 = Friday
+  const h    = now.getHours();
+  const m    = now.getMinutes();
+
+  const fridaySec = document.getElementById('fridaySection');
+  fridaySec.style.display = day === 5 ? 'block' : 'none';
+
+  if(day === 5){
+    // ساعة الاستجابة = last hour of Asr/before Maghrib
+    // approximate: 30 min before Maghrib
+    // We use 16:30-Maghrib as ijaba window — or simply last hour = 17:00-18:00 approx
+    // Better: fetch Maghrib time
+    checkIjaba(now, h, m);
+  }
+}
+
+function checkIjaba(now, h, m){
+  const ijabaSection = document.getElementById('ijabaSection');
+  const saved = localStorage.getItem('basma_city');
+  const city  = saved ? JSON.parse(saved) : {lat:21.3891,lng:39.8579};
+  const method= parseInt(localStorage.getItem('basma_method')||'4');
+  const dd=String(now.getDate()).padStart(2,'0');
+  const mm=String(now.getMonth()+1).padStart(2,'0');
+  const yyyy=now.getFullYear();
+
+  fetch(`https://api.aladhan.com/v1/timings/${dd}-${mm}-${yyyy}?latitude=${city.lat}&longitude=${city.lng}&method=${method}`)
+    .then(r=>r.json()).then(data=>{
+      if(data.code!==200) return;
+      const maghrib = data.data.timings.Maghrib;
+      const [mh,mm2] = maghrib.split(':').map(Number);
+      const maghribMins = mh*60+mm2;
+      const nowMins     = h*60+m;
+      const ijabaStart  = maghribMins - 60; // hour before maghrib
+
+      if(nowMins >= ijabaStart && nowMins < maghribMins){
+        ijabaSection.style.display = 'block';
+        const remain = maghribMins - nowMins;
+        document.getElementById('ijabaRemain').textContent =
+          `تبقّى ${remain} دقيقة — ادعُ الله بما تشاء`;
+        // hide after maghrib
+        setTimeout(()=>{ ijabaSection.style.display='none'; },(maghribMins-nowMins)*60000);
+      } else {
+        ijabaSection.style.display = 'none';
+      }
+    }).catch(()=>{});
+}
+
+showAyah();
+checkFriday();
+setInterval(checkFriday, 60000);
+
 </script>
 <script>
 /* ════════ BACKGROUND NOTIFICATION SCHEDULER ════════ */
