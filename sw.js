@@ -4,7 +4,6 @@
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
-/* ── Firebase init ── */
 firebase.initializeApp({
   apiKey: "AIzaSyBo-Uyp1ykA1HcPMm5LV5puvBGF5_-jJFU",
   authDomain: "basmah-ad91f.firebaseapp.com",
@@ -16,19 +15,17 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-/* ── Cache ── */
-const CACHE_NAME = 'basmah-v2';
+const CACHE_NAME = 'basmah-v3';
 const ASSETS = [
   '/BASMAH/',
   '/BASMAH/index.html',
-  '/BASMAH/prayer.html',
-  '/BASMAH/notify.html',
+  '/BASMAH/kahf.html',
   '/BASMAH/manifest.json',
   '/BASMAH/favicon.png'
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS).catch(()=>{})));
   self.skipWaiting();
 });
 
@@ -42,12 +39,12 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  if(e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    caches.match(e.request).then(cached => cached || fetch(e.request).catch(()=>cached))
   );
 });
 
-/* ── FCM Background Messages ── */
 messaging.onBackgroundMessage(payload => {
   const { title, body, url } = payload.data || payload.notification || {};
   return self.registration.showNotification(title || 'بسمة', {
@@ -55,12 +52,10 @@ messaging.onBackgroundMessage(payload => {
     icon: '/BASMAH/favicon.png',
     badge: '/BASMAH/favicon.png',
     vibrate: [200, 100, 200],
-    data: { url: url || '/BASMAH/' },
-    requireInteraction: false
+    data: { url: url || '/BASMAH/' }
   });
 });
 
-/* ── Notification Click ── */
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   const url = e.notification.data?.url || '/BASMAH/';
@@ -74,7 +69,6 @@ self.addEventListener('notificationclick', e => {
   );
 });
 
-/* ── Local scheduled notifications (from page message) ── */
 self.addEventListener('message', e => {
   if (e.data?.type === 'FIRE_NOTIFICATION') {
     const { title, body, url } = e.data;

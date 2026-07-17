@@ -1,40 +1,18 @@
 {
   "name": "بسمة — أذكار الصباح والمساء",
   "short_name": "بسمة",
-  "description": "أذكار الصباح والمساء ومواقيت الصلاة",
+  "description": "أذكار الصباح والمساء ومواقيت الصلاة والأدعية",
   "start_url": "/BASMAH/",
   "scope": "/BASMAH/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f5f0e8",
-  "theme_color": "#6b8f71",
+  "background_color": "#f4f1ea",
+  "theme_color": "#3d6647",
   "lang": "ar",
   "dir": "rtl",
   "icons": [
-    {
-      "src": "favicon.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "favicon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "أذكار الصباح",
-      "url": "/BASMAH/?tab=morning",
-      "icons": [{"src": "favicon.png", "sizes": "96x96"}]
-    },
-    {
-      "name": "مواقيت الصلاة",
-      "url": "/BASMAH/prayer.html",
-      "icons": [{"src": "favicon.png", "sizes": "96x96"}]
-    }
+    {"src": "favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "favicon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
   ],
   "categories": ["lifestyle", "utilities"]
 }
