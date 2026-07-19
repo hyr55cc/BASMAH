@@ -222,9 +222,10 @@ body.dark .dcard.dua .dc-tag{background:#2a2033;color:#b89ad0}
   padding:20px 18px 16px;margin-bottom:12px;
   box-shadow:var(--shadow);position:relative;
   animation:pageIn .3s ease;
-  transition:opacity .35s,transform .35s,max-height .4s,margin .35s,padding .35s;
-  overflow:hidden;
+  transition:opacity .35s,transform .12s,max-height .4s,margin .35s,padding .35s,box-shadow .2s;
+  overflow:hidden;-webkit-tap-highlight-color:transparent;
 }
+.zk-card:active{transform:scale(.985);box-shadow:0 1px 6px var(--shadow)}
 .zk-card.gone{opacity:0;transform:scale(.93);max-height:0!important;margin:0;padding:0;pointer-events:none}
 .zk-card::before{
   content:'';position:absolute;right:0;top:14px;bottom:14px;width:3.5px;
@@ -242,22 +243,22 @@ body.fs-xl .zk-text{font-size:28px}
 .zk-footer{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .zk-count-btn{
   flex:1;height:52px;border-radius:15px;border:none;
-  background:var(--accent);color:#fff;cursor:pointer;
+  background:var(--accent);color:#fff;
   font-family:var(--ui);font-size:15px;font-weight:800;
   display:flex;align-items:center;justify-content:center;gap:10px;
-  transition:all .15s;box-shadow:0 4px 14px rgba(61,102,71,.25);
+  box-shadow:0 4px 14px rgba(61,102,71,.25);pointer-events:none;
 }
-.zk-count-btn:active{transform:scale(.97)}
 .zk-count-num{
   background:rgba(255,255,255,.22);border-radius:10px;
-  padding:3px 12px;font-size:14px;
+  padding:3px 12px;font-size:14px;min-width:44px;text-align:center;
 }
 .zk-share{
   width:52px;height:52px;border-radius:15px;border:1.5px solid var(--border);
-  background:var(--card2);color:var(--text-muted);font-size:17px;cursor:pointer;
+  background:var(--card2);color:var(--text-muted);cursor:pointer;
   flex-shrink:0;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;
 }
-.zk-share:active{transform:scale(.92)}
+.zk-share:active{transform:scale(.92);background:var(--accent-soft);color:var(--accent)}
 
 /* reader done state */
 .reader-done{text-align:center;padding:50px 24px}
@@ -827,7 +828,7 @@ const AZKAR = {
     {text:"اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ",src:"رواه أبو داود",count:3},
     {text:"رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا وَرَسُولًا",src:"رواه أبو داود والترمذي",count:3},
     {text:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",src:"رواه أبو داود والترمذي",count:3},
-    {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",src:"رواه البخاري ومسلم",count:100,step:10},
+    {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",src:"رواه البخاري ومسلم",count:100},
     {text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",src:"رواه البخاري ومسلم",count:10},
     {text:"اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",src:"الصلاة على النبي ﷺ",count:10}
   ]},
@@ -843,7 +844,7 @@ const AZKAR = {
     {text:"اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ، فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ",src:"رواه أبو داود",count:1},
     {text:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",src:"رواه أبو داود والترمذي",count:3},
     {text:"اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ",src:"رواه أبو داود",count:3},
-    {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",src:"رواه البخاري ومسلم",count:100,step:10},
+    {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",src:"رواه البخاري ومسلم",count:100},
     {text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",src:"رواه البخاري ومسلم",count:10},
     {text:"اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",src:"الصلاة على النبي ﷺ",count:10}
   ]},
@@ -881,7 +882,7 @@ const AZKAR = {
     {text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",src:"رواه البخاري ومسلم",count:10},
     {text:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",src:"أحب الكلام إلى الله",count:10},
     {text:"لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ",src:"كنز من كنوز الجنة",count:10},
-    {text:"أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",src:"الاستغفار",count:100,step:10},
+    {text:"أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",src:"الاستغفار",count:100},
     {text:"اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّدٍ",src:"الصلاة على النبي ﷺ",count:10},
     {text:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",src:"دعاء قرآني — البقرة ٢٠١",count:3},
     {text:"اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي",src:"رواه مسلم",count:7},
@@ -1147,19 +1148,22 @@ function renderReaderCards(){
     card.id = 'zk-'+i;
     card.style.maxHeight = '800px';
     
-    const step = z.step || 1;
-    const remaining = z.count - prog;
-    const btnLabel = z.count === 1 ? 'تم ✓' : (step > 1 ? `+${step}` : 'تم ✓');
+    const btnLabel = z.count === 1 ? 'اضغط عند الانتهاء' : 'اضغط للعدّ';
+
+    card.setAttribute('onclick', `tapZikr(${i})`);
+    card.style.cursor = 'pointer';
 
     card.innerHTML = `
       <div class="zk-text">${z.text.replace(/\n/g,'<br>')}</div>
       <div class="zk-src">${z.src}</div>
       <div class="zk-footer">
-        <button class="zk-count-btn" onclick="tapZikr(${i})">
+        <div class="zk-count-btn" role="button">
           <span>${btnLabel}</span>
-          ${z.count>1?`<span class="zk-count-num" id="zkc-${i}">${prog} / ${z.count}</span>`:''}
+          ${z.count>1?`<span class="zk-count-num" id="zkc-${i}">${prog} / ${z.count}</span>`:'<span class="zk-count-num">✓</span>'}
+        </div>
+        <button class="zk-share" onclick="event.stopPropagation(); shareZikrText(${i})" title="مشاركة" aria-label="مشاركة">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         </button>
-        <button class="zk-share" onclick="shareZikrText(${i})">🔗</button>
       </div>`;
     body.appendChild(card);
   });
@@ -1181,8 +1185,7 @@ function tapZikr(i){
   const cat = AZKAR[currentReaderCat];
   const z = cat.items[i];
   const k = key(currentReaderCat, i);
-  const step = z.step || 1;
-  state[k] = Math.min((state[k]||0) + step, z.count);
+  state[k] = Math.min((state[k]||0) + 1, z.count);
   saveState();
 
   if(state[k] >= z.count){
