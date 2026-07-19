@@ -1791,9 +1791,31 @@ async function submitContact(){
   setInterval(updateHero, 15000);
   setInterval(updateStreak, 60000);
 
-  // SW
+  // SW — with auto-update: reload once when a new version takes over
   if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/BASMAH/sw.js',{scope:'/BASMAH/'}).catch(()=>{});
+    navigator.serviceWorker.register('/BASMAH/sw.js',{scope:'/BASMAH/'}).then(reg => {
+      // check for updates on every load
+      reg.update();
+      // when a new SW is found, activate it immediately
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if(!nw) return;
+        nw.addEventListener('statechange', () => {
+          if(nw.state === 'installed' && navigator.serviceWorker.controller){
+            // new content available -> tell it to take over now
+            nw.postMessage({type:'SKIP_WAITING'});
+          }
+        });
+      });
+    }).catch(()=>{});
+
+    // reload the page once the new SW takes control (fresh version shown)
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if(refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
   }
 })();
 </script>

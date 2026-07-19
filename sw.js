@@ -15,7 +15,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-const CACHE_NAME = 'basmah-v3';
+const CACHE_NAME = 'basmah-v4';
 const ASSETS = [
   '/BASMAH/',
   '/BASMAH/index.html',
@@ -40,9 +40,35 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if(e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(()=>cached))
-  );
+
+  const url = new URL(e.request.url);
+  const isHTML = e.request.mode === 'navigate' ||
+                 e.request.destination === 'document' ||
+                 url.pathname.endsWith('.html') ||
+                 url.pathname.endsWith('/');
+
+  if(isHTML){
+    // NETWORK-FIRST: always try to get the freshest page, fall back to cache offline
+    e.respondWith(
+      fetch(e.request).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then(c => c.put(e.request, copy));
+        return res;
+      }).catch(() => caches.match(e.request))
+    );
+  } else {
+    // CACHE-FIRST for static assets (icons, fonts) but refresh in background
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        const network = fetch(e.request).then(res => {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(e.request, copy));
+          return res;
+        }).catch(() => cached);
+        return cached || network;
+      })
+    );
+  }
 });
 
 messaging.onBackgroundMessage(payload => {
@@ -70,6 +96,10 @@ self.addEventListener('notificationclick', e => {
 });
 
 self.addEventListener('message', e => {
+  if (e.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+    return;
+  }
   if (e.data?.type === 'FIRE_NOTIFICATION') {
     const { title, body, url } = e.data;
     self.registration.showNotification(title, {
