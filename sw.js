@@ -15,13 +15,16 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-const CACHE_NAME = 'basmah-v4';
+const CACHE_NAME = 'basmah-v5';
 const ASSETS = [
   '/BASMAH/',
   '/BASMAH/index.html',
   '/BASMAH/kahf.html',
+  '/BASMAH/privacy.html',
   '/BASMAH/manifest.json',
-  '/BASMAH/favicon.png'
+  '/BASMAH/favicon.png',
+  '/BASMAH/icons/icon-192.png',
+  '/BASMAH/icons/icon-512.png'
 ];
 
 self.addEventListener('install', e => {

@@ -643,7 +643,7 @@ body.fs-xl .zk-text{font-size:28px}
 ═══════════════════════════════════════ -->
 <div class="page" id="page-dua">
   <div class="app-header">
-    <div class="ah-brand"><div><div class="ah-title">🤲 جدار الأدعية</div><div class="ah-sub">دعاؤك يصل للجميع لمدة ٢٤ ساعة · بدون اسم</div></div></div>
+    <div class="ah-brand"><div><div class="ah-title">🤲 جدار الأدعية</div><div class="ah-sub">دعاؤك يصل للجميع لمدة ٢٤ ساعة · بدون اسم · المحتوى المسيء يُخفى ويُحذف</div></div></div>
   </div>
 
   <div class="dua-input-card">
@@ -757,7 +757,8 @@ body.fs-xl .zk-text{font-size:28px}
   </div>
 
   <div style="text-align:center;padding:8px 0 24px;font-size:11px;color:var(--text-muted);font-weight:600">
-    بسمة v2.0 · صُنع بحب 🌿
+    بسمة v2.1 · صُنع بحب 🌿<br>
+    <a href="privacy.html" style="color:var(--accent);text-decoration:underline;font-weight:600">سياسة الخصوصية</a>
   </div>
 </div>
 
@@ -1524,8 +1525,24 @@ async function loadDuas(){
   }
 }
 
+/* ── UGC moderation (سياسة قوقل: إبلاغ + حجب + فلترة) ── */
+const DUA_BLOCKED_WORDS = ['كلب','حمار','حقير','قذر','لعنة','تبا','خرا','زبالة','غبي','حيوان','منيك','كس','طيز','شرموط','قحب','عاهر','زاني','كافر يا','يلعن','والله لأ'];
+function getHiddenDuas(){ try{ return JSON.parse(localStorage.getItem('basma_hidden_duas')||'[]'); }catch(e){ return []; } }
+function hideDuaLocal(id){ const h=getHiddenDuas(); if(!h.includes(id)){ h.push(id); localStorage.setItem('basma_hidden_duas', JSON.stringify(h.slice(-200))); } }
+
+function duaTextOk(text){
+  if(text.length < 3) return 'الدعاء قصير جداً';
+  if(/https?:\/\/|www\.|\.com|\.net|\.org/i.test(text)) return 'غير مسموح بالروابط';
+  if(/[0-9٠-٩]{7,}/.test(text.replace(/[\s-]/g,''))) return 'غير مسموح بأرقام الجوال';
+  const low = text.toLowerCase();
+  for(const w of DUA_BLOCKED_WORDS){ if(low.includes(w)) return 'النص يحتوي كلمات غير لائقة'; }
+  return null;
+}
+
 function renderDuaList(duas){
   const list = document.getElementById('duaList');
+  const hidden = getHiddenDuas();
+  duas = duas.filter(d=>!hidden.includes(d.id));
   if(!duas.length){
     list.innerHTML = '<div class="dua-empty">لا توجد أدعية بعد 🌿<br>كن أول من يكتب دعاءً يصل للجميع</div>';
     return;
@@ -1534,9 +1551,17 @@ function renderDuaList(duas){
   duas.forEach(d=>{
     const item = document.createElement('div');
     item.className = 'dua-item';
-    item.innerHTML = `<div class="dua-item-text">${escHtml(d.text)}</div><div class="dua-item-time">منذ ${timeSince(d.ts)}</div>`;
+    item.innerHTML = `<div class="dua-item-text">${escHtml(d.text)}</div><div class="dua-item-time" style="display:flex;justify-content:space-between;align-items:center"><span>منذ ${timeSince(d.ts)}</span><button onclick="reportDua('${d.id}')" style="background:none;border:none;cursor:pointer;font-family:var(--ui);font-size:11px;opacity:.55;color:inherit">🚩 إبلاغ</button></div>`;
     list.appendChild(item);
   });
+}
+
+async function reportDua(id){
+  if(!confirm('الإبلاغ عن هذا الدعاء كمحتوى غير لائق؟')) return;
+  hideDuaLocal(id);
+  try{ await window.fbReportDua(id); }catch(e){}
+  toast('🚩 تم الإبلاغ وإخفاء المحتوى');
+  loadDuas();
 }
 
 async function sendDua(){
@@ -1544,9 +1569,14 @@ async function sendDua(){
   const btn = document.getElementById('duaSendBtn');
   const text = inp.value.trim();
   if(!text) return;
+  const err = duaTextOk(text);
+  if(err){ toast('⚠️ '+err); return; }
+  const last = +(localStorage.getItem('basma_last_dua')||0);
+  if(Date.now()-last < 120000){ toast('⏳ انتظر دقيقتين بين كل دعاء'); return; }
   btn.disabled = true; btn.textContent = '...';
   try{
     await window.fbSendDua(text);
+    localStorage.setItem('basma_last_dua', Date.now());
     inp.value = '';
     updateDuaCount();
     toast('🤲 وصل دعاؤك للجميع');
@@ -1842,11 +1872,25 @@ window.fbLoadDuas = async function(){
   const since = Timestamp.fromMillis(Date.now()-86400000);
   const q = query(collection(db,'duas'), where('ts','>',since), orderBy('ts','desc'));
   const snap = await getDocs(q);
-  return snap.docs.map(d=>({text:d.data().text, ts:d.data().ts.toMillis()}));
+  // استبعاد أي دعاء عليه 3 بلاغات أو أكثر (اعتدال جماعي)
+  let counts = {};
+  try{
+    const rq = query(collection(db,'reports'), where('ts','>',since));
+    const rs = await getDocs(rq);
+    rs.docs.forEach(r=>{ const id=r.data().duaId; counts[id]=(counts[id]||0)+1; });
+  }catch(e){}
+  return snap.docs
+    .filter(d=>(counts[d.id]||0) < 3)
+    .map(d=>({id:d.id, text:d.data().text, ts:d.data().ts.toMillis()}));
 };
 
 window.fbSendDua = async function(text){
+  text = String(text).slice(0,300);
   await addDoc(collection(db,'duas'),{ text, ts:Timestamp.now() });
+};
+
+window.fbReportDua = async function(duaId){
+  await addDoc(collection(db,'reports'),{ duaId, ts:Timestamp.now() });
 };
 </script>
 

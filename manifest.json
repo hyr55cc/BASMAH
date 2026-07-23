@@ -1,4 +1,5 @@
 {
+  "id": "/BASMAH/",
   "name": "بسمة — أذكار الصباح والمساء",
   "short_name": "بسمة",
   "description": "أذكار الصباح والمساء ومواقيت الصلاة والأدعية",
@@ -11,8 +12,10 @@
   "lang": "ar",
   "dir": "rtl",
   "icons": [
-    {"src": "favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-    {"src": "favicon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ],
   "categories": ["lifestyle", "utilities"]
 }
