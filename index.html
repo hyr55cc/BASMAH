@@ -1855,7 +1855,7 @@ async function submitContact(){
 ═══════════════════════════════════════ -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp }
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app = initializeApp({
@@ -1886,11 +1886,11 @@ window.fbLoadDuas = async function(){
 
 window.fbSendDua = async function(text){
   text = String(text).slice(0,300);
-  await addDoc(collection(db,'duas'),{ text, ts:Timestamp.now() });
+  await addDoc(collection(db,'duas'),{ text, ts:serverTimestamp() });
 };
 
 window.fbReportDua = async function(duaId){
-  await addDoc(collection(db,'reports'),{ duaId, ts:Timestamp.now() });
+  await addDoc(collection(db,'reports'),{ duaId, ts:serverTimestamp() });
 };
 </script>
 
