@@ -20,6 +20,7 @@ python3 -m http.server 5000
 - `sw.js` — Service Worker للعمل أوفلاين
 - `manifest.json` — إعدادات PWA
 - `دليل-النشر-على-Google-Play.md` — دليل نشر التطبيق على متجر Google Play
+- `دليل-النشر-على-App-Store.md` — دليل نشر التطبيق على App Store (iOS) عبر PWABuilder
 
 ## الميزات
 
