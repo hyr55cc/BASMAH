@@ -4,6 +4,10 @@
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
+// Firebase Web API keys are intentionally public and shipped to every browser client.
+// Security is enforced by Firebase Security Rules in the Firebase console, not by
+// keeping this config confidential. Ensure Firestore/Storage rules deny unauthenticated
+// access, and restrict this API key in the Google Cloud Console to FCM APIs only.
 firebase.initializeApp({
   apiKey: "AIzaSyBo-Uyp1ykA1HcPMm5LV5puvBGF5_-jJFU",
   authDomain: "basmah-ad91f.firebaseapp.com",
