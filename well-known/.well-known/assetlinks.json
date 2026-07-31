@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.hyr55cc.basmah",
+      "sha256_cert_fingerprints": [
+        "REPLACE_WITH_PWABUILDER_SHA256_FINGERPRINT",
+        "REPLACE_WITH_GOOGLE_PLAY_SHA256_FINGERPRINT"
+      ]
+    }
+  }
+]
