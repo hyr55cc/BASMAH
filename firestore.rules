@@ -1,0 +1,97 @@
+rules_version = '2';
+
+// ════════════════════════════════════════════════════════════════
+//  بسمة — Firestore Security Rules
+//  Deploy with: firebase deploy --only firestore:rules
+// ════════════════════════════════════════════════════════════════
+//
+//  These rules are the authoritative, server-enforced moderation
+//  layer for the community Dua Wall.  Client-side checks in the
+//  browser (duaTextOk / localStorage rate-limit) remain for UX
+//  feedback only; they are NOT trusted for security.
+//
+//  Threat model addressed:
+//    - Attacker calls addDoc() directly (bypassing the UI).
+//    - Attacker submits spam, URLs, phone numbers, or oversized
+//      content via any Firebase SDK / curl / script.
+//
+// ════════════════════════════════════════════════════════════════
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Shared helpers ────────────────────────────────────────────
+
+    // Returns true when the text field passes basic content rules.
+    function textOk(text) {
+      return
+        // Must be a non-empty string within the allowed length
+        text is string &&
+        text.size() >= 3 &&
+        text.size() <= 300 &&
+
+        // Reject URLs (http/https/www/common TLDs)
+        !text.matches('(?i).*https?://.*') &&
+        !text.matches('(?i).*www\\..*') &&
+        !text.matches('(?i).*(\\.(com|net|org|io|co|app|site|link|info|biz))[^\\w].*') &&
+        !text.matches('(?i).*(\\.(com|net|org|io|co|app|site|link|info|biz))$') &&
+
+        // Reject runs of 7+ digits (phone numbers / account IDs)
+        // Covers ASCII digits and Arabic-Indic digits ٠-٩ (U+0660–U+0669)
+        !text.matches('.*[0-9]{7,}.*') &&
+        !text.matches('.*[\u0660-\u0669]{7,}.*');
+    }
+
+    // ── /duas/{duaId} ─────────────────────────────────────────────
+    match /duas/{duaId} {
+
+      // Public read: anyone may read prayers (last-24-h query in app)
+      allow read: if true;
+
+      // Create: enforce structure + content rules + server timestamp
+      allow create: if
+        // Exactly the two expected fields; no extra keys allowed
+        request.resource.data.keys().hasOnly(['text', 'ts']) &&
+        request.resource.data.keys().hasAll(['text', 'ts']) &&
+
+        // Content validation (same spirit as client-side duaTextOk)
+        textOk(request.resource.data.text) &&
+
+        // Timestamp must be the server-assigned request time
+        // (prevents back-dating and enforces serverTimestamp() usage)
+        request.resource.data.ts == request.time;
+
+      // Nobody may edit or delete prayers through the client SDK
+      allow update, delete: if false;
+    }
+
+    // ── /reports/{reportId} ───────────────────────────────────────
+    match /reports/{reportId} {
+
+      // Public read: the app aggregates report counts client-side
+      // to hide prayers with ≥ 3 reports (community moderation).
+      allow read: if true;
+
+      // Create: only a valid report document is accepted
+      allow create: if
+        request.resource.data.keys().hasOnly(['duaId', 'ts']) &&
+        request.resource.data.keys().hasAll(['duaId', 'ts']) &&
+
+        // duaId must be a non-empty string (Firestore doc ID)
+        request.resource.data.duaId is string &&
+        request.resource.data.duaId.size() > 0 &&
+        request.resource.data.duaId.size() <= 128 &&
+
+        // Server timestamp required
+        request.resource.data.ts == request.time;
+
+      // Reports are immutable once submitted
+      allow update, delete: if false;
+    }
+
+    // ── Catch-all: deny every other collection / path ─────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
