@@ -319,7 +319,6 @@ async function getFCMToken(){
     const token = await getToken(fbMsg, {vapidKey: VAPID_KEY, serviceWorkerRegistration: sw});
     if(token){
       localStorage.setItem('basma_fcm_token', token);
-      console.log('FCM Token:', token);
       return token;
     }
   }catch(e){ console.warn('FCM token error:', e); }
