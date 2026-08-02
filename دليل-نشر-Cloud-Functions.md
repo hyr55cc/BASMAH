@@ -28,31 +28,30 @@
 
 > ⚠️ Cloud Functions مجانية بالكامل تقريباً للاستخدام المحدود (2 مليون استدعاء/شهر مجاناً)
 
-### 2. تثبيت التبعيات
+### 2. النشر بأمر واحد (من Replit Shell أو Terminal محلي)
 
 ```bash
-cd functions
-npm install
+# في Replit: افتح تبويب Shell وشغّل:
+bash deploy-functions.sh
 ```
 
-### 3. تسجيل الدخول إلى Firebase
+أو خطوة بخطوة:
 
 ```bash
+# تثبيت التبعيات (مرة واحدة)
+cd functions && npm install && cd ..
+
+# تسجيل الدخول
 firebase login
-```
 
-### 4. نشر الـ Function
-
-```bash
-# من مجلد المشروع الرئيسي (وليس functions/)
+# نشر الـ Function
 firebase deploy --only functions --project basmah-ad91f
 ```
 
-أو لنشر كل شيء (rules + functions + hosting):
-
-```bash
-firebase deploy --project basmah-ad91f
-```
+> **ملاحظة:** لنشر كل شيء (rules + functions + hosting) في آنٍ واحد:
+> ```bash
+> firebase deploy --project basmah-ad91f
+> ```
 
 ---
 
