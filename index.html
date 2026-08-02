@@ -643,7 +643,7 @@ body.fs-xl .zk-text{font-size:28px}
 ═══════════════════════════════════════ -->
 <div class="page" id="page-dua">
   <div class="app-header">
-    <div class="ah-brand"><div><div class="ah-title">🤲 جدار الأدعية</div><div class="ah-sub">دعاؤك يصل للجميع لمدة ٢٤ ساعة · بدون اسم · المحتوى المسيء يُخفى ويُحذف</div></div></div>
+    <div class="ah-brand"><div><div class="ah-title">🤲 جدار الأدعية</div><div class="ah-sub">دعاؤك يصل للجميع لمدة ٢٤ ساعة · بدون اسم · المحتوى المسيء يُحذف نهائياً</div></div></div>
   </div>
 
   <div class="dua-input-card">
@@ -1560,7 +1560,7 @@ async function reportDua(id){
   if(!confirm('الإبلاغ عن هذا الدعاء كمحتوى غير لائق؟')) return;
   hideDuaLocal(id);
   try{ await window.fbReportDua(id); }catch(e){}
-  toast('🚩 تم الإبلاغ وإخفاء المحتوى');
+  toast('🚩 تم الإبلاغ · سيُحذف المحتوى تلقائياً عند تجاوز حد البلاغات');
   loadDuas();
 }
 
