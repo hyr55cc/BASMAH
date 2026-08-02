@@ -36,6 +36,22 @@ exports.autoDeleteReportedDua = onDocumentCreated(
 
     if (reportsSnap.size < 3) return; // لم يصل للحد بعد
 
+    // تحقق من تنوع مصادر البلاغات:
+    // يجب أن يصدر كل بلاغ من UID مختلف (مُصدَر من الخادم عبر Firebase Anonymous Auth)
+    // هذا يمنع مستخدماً واحداً من تشغيل الحذف بثلاثة بلاغات متتالية
+    const uniqueUids = new Set(
+      reportsSnap.docs
+        .map(d => d.data().uid)
+        .filter(uid => typeof uid === 'string' && uid.length > 0)
+    );
+    if (uniqueUids.size < 3) {
+      console.log(
+        `[autoDeleteReportedDua] Skipped: dua ${duaId} has ` +
+        `${reportsSnap.size} report(s) but only ${uniqueUids.size} unique UID(s).`
+      );
+      return;
+    }
+
     // Firestore batch: حذف الدعاء + جميع بلاغاته دفعة واحدة
     const batch = db.batch();
 

@@ -1530,6 +1530,11 @@ const DUA_BLOCKED_WORDS = ['كلب','حمار','حقير','قذر','لعنة','�
 function getHiddenDuas(){ try{ return JSON.parse(localStorage.getItem('basma_hidden_duas')||'[]'); }catch(e){ return []; } }
 function hideDuaLocal(id){ const h=getHiddenDuas(); if(!h.includes(id)){ h.push(id); localStorage.setItem('basma_hidden_duas', JSON.stringify(h.slice(-200))); } }
 
+/* ── Report dedup: UX layer — prevent repeat reports from same device ── */
+function getReportedDuas(){ try{ return JSON.parse(localStorage.getItem('basma_reported_duas')||'[]'); }catch(e){ return []; } }
+function hasReportedDua(id){ return getReportedDuas().includes(id); }
+function markDuaReported(id){ const r=getReportedDuas(); if(!r.includes(id)){ r.push(id); localStorage.setItem('basma_reported_duas', JSON.stringify(r.slice(-200))); } }
+
 function duaTextOk(text){
   if(text.length < 3) return 'الدعاء قصير جداً';
   if(/https?:\/\/|www\.|\.com|\.net|\.org/i.test(text)) return 'غير مسموح بالروابط';
@@ -1557,8 +1562,10 @@ function renderDuaList(duas){
 }
 
 async function reportDua(id){
+  if(hasReportedDua(id)){ toast('🚩 سبق أن أبلغت عن هذا الدعاء من هذا الجهاز'); return; }
   if(!confirm('الإبلاغ عن هذا الدعاء كمحتوى غير لائق؟')) return;
   hideDuaLocal(id);
+  markDuaReported(id);
   try{ await window.fbReportDua(id); }catch(e){}
   toast('🚩 تم الإبلاغ · سيُحذف المحتوى تلقائياً عند تجاوز حد البلاغات');
   loadDuas();
@@ -1855,8 +1862,10 @@ async function submitContact(){
 ═══════════════════════════════════════ -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp, serverTimestamp }
+import { getFirestore, collection, addDoc, setDoc, doc, getDocs, query, orderBy, where, Timestamp, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, signInAnonymously, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const app = initializeApp({
   apiKey:"AIzaSyBo-Uyp1ykA1HcPMm5LV5puvBGF5_-jJFU",
@@ -1866,21 +1875,44 @@ const app = initializeApp({
   messagingSenderId:"841162019434",
   appId:"1:841162019434:web:5fbbbef1b504a97a67b013"
 });
-const db = getFirestore(app);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+// تسجيل دخول مجهول تلقائي — يضمن أن لكل جهاز/متصفح UID صادراً من الخادم
+// ولا يمكن تزويره من الطرف العميل
+signInAnonymously(auth).catch(()=>{});
+
+// دالة مساعدة: تنتظر حتى يصبح UID متاحاً
+function getUid(){
+  return new Promise((resolve, reject)=>{
+    const user = auth.currentUser;
+    if(user) return resolve(user.uid);
+    const unsub = onAuthStateChanged(auth, u=>{
+      unsub();
+      if(u) resolve(u.uid); else reject(new Error('auth unavailable'));
+    });
+  });
+}
 
 window.fbLoadDuas = async function(){
   const since = Timestamp.fromMillis(Date.now()-86400000);
   const q = query(collection(db,'duas'), where('ts','>',since), orderBy('ts','desc'));
   const snap = await getDocs(q);
-  // استبعاد أي دعاء عليه 3 بلاغات أو أكثر (اعتدال جماعي)
-  let counts = {};
+  // استبعاد أي دعاء عليه 3 مُبلِّغين مختلفين أو أكثر (اعتدال جماعي)
+  // نعدّ المبلّغين الفريدين (uid) لا مجرد عدد البلاغات الخام
+  let uniqueReporters = {};   // duaId -> Set<uid>
   try{
     const rq = query(collection(db,'reports'), where('ts','>',since));
     const rs = await getDocs(rq);
-    rs.docs.forEach(r=>{ const id=r.data().duaId; counts[id]=(counts[id]||0)+1; });
+    rs.docs.forEach(r=>{
+      const { duaId, uid } = r.data();
+      if(!duaId || !uid) return;
+      if(!uniqueReporters[duaId]) uniqueReporters[duaId] = new Set();
+      uniqueReporters[duaId].add(uid);
+    });
   }catch(e){}
   return snap.docs
-    .filter(d=>(counts[d.id]||0) < 3)
+    .filter(d=> !uniqueReporters[d.id] || uniqueReporters[d.id].size < 3)
     .map(d=>({id:d.id, text:d.data().text, ts:d.data().ts.toMillis()}));
 };
 
@@ -1890,7 +1922,11 @@ window.fbSendDua = async function(text){
 };
 
 window.fbReportDua = async function(duaId){
-  await addDoc(collection(db,'reports'),{ duaId, ts:serverTimestamp() });
+  // معرّف المستند = uid_duaId (محدد بشكل ثابت)
+  // إذا أرسل نفس المستخدم بلاغاً مرة ثانية، تُرفض العملية بقاعدة update:if false
+  const uid = await getUid();
+  const reportId = uid + '_' + duaId;
+  await setDoc(doc(db,'reports', reportId),{ duaId, uid, ts:serverTimestamp() });
 };
 </script>
 

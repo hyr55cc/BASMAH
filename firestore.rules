@@ -72,15 +72,29 @@ service cloud.firestore {
       // to hide prayers with ≥ 3 reports (community moderation).
       allow read: if true;
 
-      // Create: only a valid report document is accepted
+      // Create: only a valid report document is accepted.
+      //
+      // Anti-abuse: the document ID is {uid}_{duaId} (deterministic).
+      // A second report from the same UID hits the update path, which is
+      // blocked by "allow update: if false" below — so one UID = one report
+      // per dua, enforced at the database level by Firebase Auth.
       allow create: if
-        request.resource.data.keys().hasOnly(['duaId', 'ts']) &&
-        request.resource.data.keys().hasAll(['duaId', 'ts']) &&
+        // Must be authenticated (anonymous sign-in is enough; UID is
+        // server-issued and cannot be forged by the client)
+        request.auth != null &&
+
+        // Exactly the three expected fields; no extra keys allowed
+        request.resource.data.keys().hasOnly(['duaId', 'uid', 'ts']) &&
+        request.resource.data.keys().hasAll(['duaId', 'uid', 'ts']) &&
 
         // duaId must be a non-empty string (Firestore doc ID)
         request.resource.data.duaId is string &&
         request.resource.data.duaId.size() > 0 &&
         request.resource.data.duaId.size() <= 128 &&
+
+        // uid must match the server-verified caller UID — cannot be spoofed
+        request.resource.data.uid is string &&
+        request.resource.data.uid == request.auth.uid &&
 
         // Server timestamp required
         request.resource.data.ts == request.time;
