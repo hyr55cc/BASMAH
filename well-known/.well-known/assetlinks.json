@@ -5,8 +5,8 @@
       "namespace": "android_app",
       "package_name": "io.github.hyr55cc.basmah",
       "sha256_cert_fingerprints": [
-        "REPLACE_WITH_PWABUILDER_SHA256_FINGERPRINT",
-        "REPLACE_WITH_GOOGLE_PLAY_SHA256_FINGERPRINT"
+        "99:4D:1E:9C:C6:94:85:8F:8F:D7:C4:66:69:B1:5E:6F:14:35:C9:9D:AF:9A:C1:EE:E5:7E:5B:CF:CB:79:41:50",
+        "FC:FA:5C:1A:92:32:9D:32:2E:D3:92:DA:03:37:79:60:B7:6D:EE:81:70:0F:E4:89:41:E0:D7:12:7E:3F:18:1E"
       ]
     }
   }
