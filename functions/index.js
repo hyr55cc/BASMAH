@@ -103,9 +103,28 @@ exports.autoDeleteReportedDua = onDocumentCreated(
 
     if (reportsSnap.size < 3) return; // لم يصل للحد بعد
 
-    // تحقق من تنوع مصادر البلاغات:
-    // يجب أن يصدر كل بلاغ من UID مختلف
-    // هذا يمنع مستخدماً واحداً من تشغيل الحذف بثلاثة بلاغات متتالية
+    // ─────────────────────────────────────────────────────────────────
+    // حماية: يجب أن يصدر كل بلاغ من UID مختلف (تسجيل دخول مجهول Firebase).
+    // هذا يمنع مستخدماً واحداً من تشغيل الحذف بعدة بلاغات من نفس الجهاز.
+    //
+    // طبقات الحماية المتكاملة:
+    //   ① localStorage (index.html → hasReportedDua):
+    //      إذا أبلغ المتصفح عن دعاء من قبل، يظهر "سبق أن أبلغت" ويرجع مبكراً.
+    //   ② Firestore document ID = uid + '_' + duaId (index.html → fbReportDua):
+    //      setDoc بنفس المعرّف يستبدل المستند دون زيادة عدد البلاغات.
+    //   ③ uniqueUids هنا (Cloud Function):
+    //      حتى لو تجاوز المستخدم ①+② (مثلاً: مسح localStorage أو استخدام
+    //      console)، تتحقق الدالة أن عدد UIDs الفريدة ≥ 3 قبل الحذف.
+    //
+    // كيفية اختبار هذا المنطق يدوياً:
+    //   1. افتح التطبيق في المتصفح وأضف دعاءً → احفظ duaId من Firestore.
+    //   2. ابلغ عنه من نفس المتصفح → يُحفظ المستند reports/{uid1}_{duaId}.
+    //   3. امسح localStorage ثم أعِد الإبلاغ → يُعيد كتابة نفس المستند (uid لم يتغير).
+    //   4. تحقق في Firestore Console: لا يزال هناك بلاغ واحد فقط لهذا uid.
+    //   5. ستلاحظ في logs الدالة:
+    //      "Skipped: dua <id> has 1 report(s) but only 1 unique UID(s)."
+    //   6. لاختبار الحذف الفعلي: استخدم 3 متصفحات/أجهزة مختلفة للإبلاغ.
+    // ─────────────────────────────────────────────────────────────────
     const uniqueUids = new Set(
       reportsSnap.docs
         .map(d => d.data().uid)
@@ -114,7 +133,8 @@ exports.autoDeleteReportedDua = onDocumentCreated(
     if (uniqueUids.size < 3) {
       console.log(
         `[autoDeleteReportedDua] Skipped: dua ${duaId} has ` +
-        `${reportsSnap.size} report(s) but only ${uniqueUids.size} unique UID(s).`
+        `${reportsSnap.size} report(s) but only ${uniqueUids.size} unique UID(s). ` +
+        `Need 3 distinct UIDs to trigger deletion.`
       );
       return;
     }
