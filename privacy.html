@@ -4,55 +4,105 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سياسة الخصوصية — بسمة</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'Tajawal','Segoe UI',sans-serif;background:#f4f1ea;color:#2d3a2e;max-width:720px;margin:0 auto;padding:24px 20px 60px;line-height:1.9}
-  h1{color:#3d6647;font-size:26px}
-  h2{color:#3d6647;font-size:18px;margin-top:28px}
-  .card{background:#fff;border-radius:16px;padding:20px 22px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-  a{color:#3d6647}
-  .muted{color:#7a8578;font-size:13px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:#f4f1ea;color:#1c2b20;line-height:1.9;padding:0}
+.header{background:linear-gradient(135deg,#3d6647,#5a8a66);color:#fff;padding:40px 20px;text-align:center}
+.header h1{font-size:28px;font-weight:800;margin-bottom:8px}
+.header p{opacity:.85;font-size:14px}
+.container{max-width:760px;margin:0 auto;padding:30px 20px 60px}
+.card{background:#fff;border-radius:16px;padding:26px;margin-bottom:18px;box-shadow:0 2px 12px rgba(61,102,71,.08)}
+h2{color:#3d6647;font-size:19px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+p{margin-bottom:12px;color:#3a4e40}
+ul{margin:10px 20px 12px;color:#3a4e40}
+li{margin-bottom:6px}
+.updated{text-align:center;color:#8ba191;font-size:13px;margin-top:20px}
+.divider{height:1px;background:#e4e9e2;margin:30px 0}
+.en{direction:ltr;text-align:left}
+.en h2{justify-content:flex-start}
+a{color:#3d6647}
 </style>
 </head>
 <body>
-<h1>🌿 سياسة الخصوصية — تطبيق بسمة</h1>
-<p class="muted">آخر تحديث: 21 يوليو 2026</p>
 
-<div class="card">
-<p>تطبيق «بسمة — أذكار الصباح والمساء» تطبيق مجاني للأذكار ومواقيت الصلاة والأدعية. خصوصيتك تهمنا، وهذه الصفحة توضح بشفافية ما البيانات التي يتعامل معها التطبيق وكيف تُستخدم.</p>
-
-<h2>١. لا حسابات ولا تسجيل</h2>
-<p>التطبيق لا يتطلب إنشاء حساب ولا يجمع اسمك أو بريدك أو رقم هاتفك. إعداداتك (المظهر، الخط، الإشعارات، إنجازك اليومي) تُحفظ محلياً على جهازك فقط ولا تُرسل إلينا.</p>
-
-<h2>٢. جدار الأدعية (محتوى المستخدمين)</h2>
-<p>عند إرسال دعاء في «جدار الأدعية» يُخزَّن نص الدعاء فقط — بدون اسم أو أي معرّف شخصي — على خوادم Google Firebase، ويظهر لجميع المستخدمين لمدة 24 ساعة ثم يختفي تلقائياً. تُطبَّق فلترة على النصوص المسيئة، ويمكن لأي مستخدم الإبلاغ عن أي دعاء غير لائق عبر زر «🚩 إبلاغ»، ويُخفى المحتوى الذي يتلقى بلاغات متعددة ويُحذف عند المراجعة.</p>
-
-<h2>٣. الموقع الجغرافي (اختياري)</h2>
-<p>إذا اخترت زر «📍 موقعي» لحساب مواقيت الصلاة، تُستخدم إحداثيات موقعك لحظياً فقط لإرسالها إلى خدمة مواقيت الصلاة (AlAdhan API) وخدمة تحديد اسم المدينة (OpenStreetMap Nominatim). نحن لا نخزّن موقعك على أي خادم خاص بنا، ويمكنك بدلاً من ذلك اختيار مدينتك يدوياً بدون أي صلاحية موقع.</p>
-
-<h2>٤. الإشعارات (اختيارية)</h2>
-<p>إشعارات الأذكار وتنبيهات الصلاة اختيارية وتعمل فقط إذا فعّلتها. قد يُستخدم رمز تعريف الجهاز (FCM Token) الخاص بخدمة إشعارات Google Firebase لإيصال الإشعارات، وهو رمز تقني لا يكشف هويتك. يمكنك إيقاف الإشعارات في أي وقت من إعدادات التطبيق أو إعدادات النظام.</p>
-
-<h2>٥. نموذج «تواصل معنا»</h2>
-<p>إذا راسلتنا عبر نموذج التواصل، يصلنا نص رسالتك (وبريدك إن أدخلته) عبر خدمة FormSubmit لغرض الرد عليك فقط، ولا يُستخدم لأي غرض آخر.</p>
-
-<h2>٦. الخدمات الخارجية المستخدمة</h2>
-<p>يعتمد التطبيق على الخدمات التالية، ولكل منها سياسة خصوصيتها:
-Google Firebase (تخزين الأدعية والإشعارات)، AlAdhan API (مواقيت الصلاة)، OpenStreetMap Nominatim (تحديد المدينة)، Google Fonts (الخطوط)، وFormSubmit (نموذج التواصل).</p>
-
-<h2>٧. الإعلانات والمشتريات</h2>
-<p>التطبيق لا يحتوي على أي إعلانات ولا مشتريات داخل التطبيق ولا أدوات تتبع أو تحليلات إعلانية.</p>
-
-<h2>٨. الأطفال</h2>
-<p>التطبيق موجّه لعموم المستخدمين ومحتواه ديني آمن، ولا يجمع بيانات شخصية من أي مستخدم بما في ذلك الأطفال.</p>
-
-<h2>٩. حذف البيانات</h2>
-<p>البيانات المحلية تُحذف بحذف بيانات التطبيق أو إلغاء تثبيته. الأدعية تُحذف تلقائياً بعد 24 ساعة. لطلب حذف أي محتوى أو للاستفسار، تواصل معنا عبر نموذج «تواصل معنا» داخل التطبيق أو على البريد: <a href="mailto:halfofthird@gmail.com">halfofthird@gmail.com</a>.</p>
-
-<h2>١٠. التغييرات على هذه السياسة</h2>
-<p>عند أي تحديث جوهري لهذه السياسة سيُنشر التعديل في هذه الصفحة مع تحديث التاريخ أعلاه.</p>
+<div class="header">
+  <h1>🌿 سياسة الخصوصية</h1>
+  <p>تطبيق بسمة — أذكار الصباح والمساء</p>
 </div>
 
-<p class="muted" style="text-align:center;margin-top:20px"><a href="index.html">← العودة إلى بسمة</a></p>
+<div class="container">
+
+  <div class="card">
+    <h2>📌 مقدمة</h2>
+    <p>نحن في تطبيق «بسمة» نحترم خصوصيتك ونلتزم بحمايتها. توضّح هذه السياسة كيفية تعاملنا مع المعلومات عند استخدامك للتطبيق.</p>
+    <p><strong>باختصار: تطبيق بسمة لا يجمع أي بيانات شخصية تُعرّف عنك.</strong></p>
+  </div>
+
+  <div class="card">
+    <h2>📍 معلومات الموقع</h2>
+    <p>يطلب التطبيق الوصول لموقعك <strong>فقط</strong> لعرض مواقيت الصلاة الدقيقة لمنطقتك. هذه المعلومة:</p>
+    <ul>
+      <li>تُستخدم محلياً على جهازك فقط</li>
+      <li>لا تُحفظ على أي خادم</li>
+      <li>لا تُشارك مع أي طرف ثالث</li>
+      <li>يمكنك اختيار مدينتك يدوياً بدون تفعيل الموقع</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🔔 الإشعارات</h2>
+    <p>يستخدم التطبيق الإشعارات لتذكيرك بأوقات الأذكار والصلاة. تُدار هذه الإشعارات محلياً على جهازك، ويمكنك تعطيلها في أي وقت من الإعدادات.</p>
+  </div>
+
+  <div class="card">
+    <h2>💾 التخزين المحلي</h2>
+    <p>يحفظ التطبيق إعداداتك وتقدّمك في الأذكار <strong>على جهازك فقط</strong> (مثل: الثيم المفضّل، حجم الخط، عدد الأيام المتتالية). هذه البيانات لا تُرسل لأي مكان.</p>
+  </div>
+
+  <div class="card">
+    <h2>🤲 جدار الأدعية</h2>
+    <p>عند كتابة دعاء في «جدار الأدعية المشتركة»، يظهر الدعاء لمستخدمي التطبيق لمدة ٢٤ ساعة بشكل <strong>مجهول تماماً</strong> — دون اسم أو أي معلومة تعرّف عنك. لا نربط الأدعية بهويتك.</p>
+  </div>
+
+  <div class="card">
+    <h2>🌐 خدمات خارجية</h2>
+    <p>يستخدم التطبيق خدمات موثوقة لعرض المحتوى:</p>
+    <ul>
+      <li><strong>Aladhan API</strong> — لحساب مواقيت الصلاة</li>
+      <li><strong>Firebase</strong> — لعرض جدار الأدعية المشتركة</li>
+    </ul>
+    <p>هذه الخدمات لا تتلقى أي معلومات شخصية تعرّف عنك.</p>
+  </div>
+
+  <div class="card">
+    <h2>👶 خصوصية الأطفال</h2>
+    <p>التطبيق مناسب لجميع الأعمار ولا يجمع أي بيانات من الأطفال أو غيرهم.</p>
+  </div>
+
+  <div class="card">
+    <h2>📧 التواصل</h2>
+    <p>لأي استفسار حول الخصوصية، تواصل معنا عبر:<br>
+    <a href="mailto:halfofthird@gmail.com">halfofthird@gmail.com</a></p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ENGLISH VERSION -->
+  <div class="card en">
+    <h2>📌 Privacy Policy (English)</h2>
+    <p>We at "Basmah" respect your privacy. <strong>Basmah does not collect any personally identifiable data.</strong></p>
+    <p><strong>Location:</strong> Used only locally to show accurate prayer times. Never stored or shared.</p>
+    <p><strong>Notifications:</strong> Managed locally on your device for azkar and prayer reminders.</p>
+    <p><strong>Local Storage:</strong> Your settings and progress are saved only on your device.</p>
+    <p><strong>Dua Wall:</strong> Prayers are posted anonymously for 24 hours with no identifying information.</p>
+    <p><strong>Third-party services:</strong> Aladhan API (prayer times) and Firebase (dua wall) — neither receives personal data.</p>
+    <p><strong>Contact:</strong> <a href="mailto:halfofthird@gmail.com">halfofthird@gmail.com</a></p>
+  </div>
+
+  <p class="updated">آخر تحديث: أغسطس ٢٠٢٦ · Last updated: August 2026</p>
+
+</div>
+
 </body>
 </html>

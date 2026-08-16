@@ -296,10 +296,6 @@ import { initializeApp }        from 'https://www.gstatic.com/firebasejs/10.12.0
 import { getMessaging, getToken, onMessage }
                                 from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js';
 
-// Firebase Web API keys are intentionally public and shipped to every browser client.
-// Security is enforced by Firebase Security Rules in the Firebase console, not by
-// keeping this config confidential. Ensure Firestore/Storage rules deny unauthenticated
-// access, and restrict this API key in the Google Cloud Console to FCM APIs only.
 fbApp = initializeApp({
   apiKey:"AIzaSyBo-Uyp1ykA1HcPMm5LV5puvBGF5_-jJFU",
   authDomain:"basmah-ad91f.firebaseapp.com",
@@ -323,6 +319,7 @@ async function getFCMToken(){
     const token = await getToken(fbMsg, {vapidKey: VAPID_KEY, serviceWorkerRegistration: sw});
     if(token){
       localStorage.setItem('basma_fcm_token', token);
+      console.log('FCM Token:', token);
       return token;
     }
   }catch(e){ console.warn('FCM token error:', e); }
